@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="block/head :: header"/>
+
+<div class="container">
+    <div class="col px-md-5">
+        <div class="p-3 border bg-light">
+            <form method="post" action="/filter">
+                <input type="text" placeholder="Фильтр" name="filter"/>
+                <button type="submit" class="btn btn-success">Найти</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<br>
+<div class="container">
+    <div class="col px-md-5">
+        <div class="p-3 border bg-light">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Наименование</th>
+                    <th scope="col">Описание</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="i : ${list}">
+                    <tr>
+                        <td th:text="${i.getId()}"/>
+                        <td th:text="${i.getName()}"/>
+                        <td th:text="${i.getDescription()}"/>
+                        <td>
+                            <a th:href="${i.getId()} + '/edit'" class="btn btn-warning">Редактировать</a>
+                        </td>
+                        <td>
+                            <form th:action="${i.getId()} + '/remove'" method="post">
+                                <button class="btn btn-warning" type="submit">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                </div>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-5">
+            <div class="col px-md-5">
+                <div class="p-3 border bg-light">
+                    <h5>Добавить товар:</h5>
+                    <form action="/" method="post">
+                        <input type="text" name="name" placeholder="Наименование" class="form-control"><br>
+                        <textarea typeof="text" name="description" placeholder="Описание"
+                                  class="form-control"></textarea><br>
+                        <button type="submit" class="btn btn-success">Добавить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
