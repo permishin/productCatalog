@@ -1,7 +1,7 @@
 # productCatalog
 
 
-Подключить MySQL:
+Создать БД MySQL и подключить к проекту:
 
 -- phpMyAdmin SQL Dump
 -- version 4.9.3
