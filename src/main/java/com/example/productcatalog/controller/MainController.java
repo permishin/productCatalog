@@ -37,7 +37,7 @@ public class MainController {
     }
 
     @PostMapping("/{id}/remove")
-    public String delete(@PathVariable(value = "id") Long id, Model model) {
+    public String delete(@PathVariable(value = "id") Long id) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         productRepo.delete(product);
         return "redirect:/";
@@ -57,7 +57,7 @@ public class MainController {
     }
 
     @PostMapping("/{id}/edit")
-    public String PostEdit(@PathVariable(value = "id") Long id, @RequestParam String name, @RequestParam String description, Model model) {
+    public String PostEdit(@PathVariable(value = "id") Long id, @RequestParam String name, @RequestParam String description) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         product.setName(name);
         product.setDescription(description);
