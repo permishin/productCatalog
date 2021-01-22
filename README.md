@@ -1,7 +1,7 @@
 # productCatalog
 
 
-Создать БД MySQL и подключить к проекту:
+1. Создать БД MySQL и подключить к проекту:
 
 -- phpMyAdmin SQL Dump
 -- version 4.9.3
@@ -67,4 +67,5 @@ INSERT INTO `product` (`id`, `description`, `name`) VALUES
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`);
   
-  Запустить ProductCatalogApplication.java
+2. Поправить настройки на актуальные в файле application.properties 
+3. Запустить ProductCatalogApplication.java
