@@ -17,9 +17,7 @@
                 <div class="p-3 border bg-light">
                     <h5>Редактировать продукт</h5>
                     <div th:each="el : ${user}">
-                        <form method="post" enctype="multipart/form-data">
-                            <img th:src="'/img/' + ${el.getFilename()}" width="150" height="150"/><br>
-                            <input type="file" name="file"><br>
+                        <form method="post">
                             <input type="text" th:value="${el.getName()}" name="name"
                                    placeholder="Введите название статьи" class="form-control"><br>
                             <textarea name="description" placeholder="Введите полный текст статьи" class="form-control"

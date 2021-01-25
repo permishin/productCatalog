@@ -29,7 +29,6 @@
                 <thead>
                 <tr>
                     <th scope="col">№</th>
-                    <th scope="col">Фото</th>
                     <th scope="col">Наименование</th>
                     <th scope="col">Описание</th>
                     <th scope="col">Edit</th>
@@ -40,7 +39,6 @@
                 <div th:each="i : ${list}">
                     <tr>
                         <td th:text="${i.getId()}"/>
-                        <td th:if="${i.getFilename()}"><img th:src="'/img/' + ${i.getFilename()}" width="150" height="150"/></td>
                         <td th:text="${i.getName()}"/>
                         <td th:text="${i.getDescription()}"/>
                         <td>
@@ -65,13 +63,10 @@
             <div class="col px-md-5">
                 <div class="p-3 border bg-light">
                     <h5>Добавить товар:</h5>
-                    <form action="/" method="post" enctype="multipart/form-data">
-                        <input type="file" name="file">
-                        <br>
+                    <form action="/" method="post">
                         <input type="text" name="name" placeholder="Наименование" class="form-control"><br>
                         <textarea typeof="text" name="description" placeholder="Описание"
                                   class="form-control"></textarea><br>
-
                         <button type="submit" class="btn btn-success">Добавить</button>
                     </form>
                 </div>
