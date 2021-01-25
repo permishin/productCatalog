@@ -13,7 +13,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name, description;
+    private String name, description, filename;
 
     public Product() {
     }
@@ -45,5 +45,13 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 }
