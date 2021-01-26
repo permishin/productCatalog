@@ -3,14 +3,20 @@ package com.example.productcatalog.controller;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Controller
@@ -18,6 +24,9 @@ public class MainController {
 
     @Autowired
     private ProductRepo productRepo;
+
+    @Value("${upload.path}")
+    private String uploadPath;
 
     @GetMapping("/")
     public String main(Model model) {
@@ -28,8 +37,24 @@ public class MainController {
     }
 
     @PostMapping("/")
-    public String add(@RequestParam String name, @RequestParam String description, Model model) {
+    public String add(
+            @RequestParam String name,
+            @RequestParam String description,
+            @RequestParam("file") MultipartFile file,
+            Model model) throws IOException {
         Product product = new Product(name, description);
+
+        if (file != null) {
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdir();
+            }
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+            product.setFileName(resultFileName);
+
+            file.transferTo(new File(uploadPath + "/" + resultFileName));
+        }
         productRepo.save(product);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("list", list);
