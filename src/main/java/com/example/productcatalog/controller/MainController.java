@@ -65,7 +65,11 @@ public class MainController {
     @PostMapping("/{id}/remove")
     public String delete(@PathVariable(value = "id") Long id) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        s3Amazon.deleteFile(product.getFileName());
+        try {
+            s3Amazon.deleteFile(product.getFileName());
+        } catch (IllegalArgumentException a) {
+            a.getMessage();
+        }
         productRepo.delete(product);
         return "redirect:/";
     }
