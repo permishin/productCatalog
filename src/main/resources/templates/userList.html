@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${title}"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+<header th:insert="block/head :: header"/>
+<div class="container">
+    <div class="col px-md-5">
+        <div class="p-3 border bg-light">
+List of users
+<table>
+    <thead>
+    <tr>
+        <th>Имя</th>
+        <th>Роль</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <div th:each="a : ${users}">
+    <tr>
+        <td th:text="${a.getUsername()}"/>
+        <td th:each="role : ${a.getRoles()}">
+            <div th:text="${role.name()}"/></td>
+        <td> <a th:href="'/user/' + ${a.getId()}">Edit</a></td>
+        <td>
+            <form th:action="'/user/' + ${a.getId()} + '/remove'" method="post">
+                <button class="btn btn-warning" type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+    </div>
+    </tbody>
+</table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

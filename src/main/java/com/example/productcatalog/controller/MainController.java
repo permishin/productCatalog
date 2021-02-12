@@ -1,8 +1,8 @@
 package com.example.productcatalog.controller;
 
 import com.example.productcatalog.entity.Product;
+import com.example.productcatalog.plugin.S3Amazon;
 import com.example.productcatalog.repo.ProductRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,18 +12,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-
 @Controller
 public class MainController {
 
-    @Autowired
-    private ProductRepo productRepo;
+    private S3Amazon s3Amazon;
+    private final ProductRepo productRepo;
+
+
+    public MainController(S3Amazon s3Amazon, ProductRepo productRepo) {
+        this.s3Amazon = s3Amazon;
+        this.productRepo = productRepo;
+    }
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -32,6 +36,7 @@ public class MainController {
     public String main(Model model) {
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("title", "Каталог товаров");
+        model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
         return "main";
     }
@@ -44,19 +49,15 @@ public class MainController {
             Model model) throws IOException {
         Product product = new Product(name, description);
 
-        if (file != null) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
             String uuidFile = UUID.randomUUID().toString();
             String resultFileName = uuidFile + "." + file.getOriginalFilename();
             product.setFileName(resultFileName);
-
-            file.transferTo(new File(uploadPath + "/" + resultFileName));
+            s3Amazon.uploadFile(resultFileName, file);
         }
         productRepo.save(product);
         Iterable<Product> list = productRepo.findAll();
+        model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
         return "main";
     }
@@ -64,6 +65,7 @@ public class MainController {
     @PostMapping("/{id}/remove")
     public String delete(@PathVariable(value = "id") Long id) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
+        s3Amazon.deleteFile(product.getFileName());
         productRepo.delete(product);
         return "redirect:/";
     }
@@ -77,16 +79,26 @@ public class MainController {
         ArrayList<Product> list = new ArrayList<>();
         user.ifPresent(list::add);
         model.addAttribute("user", list);
-        model.addAttribute("title", "Редактировать продкт");
+        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("title", "Редактировать продукт");
         return "edit";
     }
 
     @PostMapping("/{id}/edit")
-    public String PostEdit(@PathVariable(value = "id") Long id, @RequestParam String name, @RequestParam String description) {
+    public String PostEdit(@PathVariable(value = "id") Long id,
+                           @RequestParam String name,
+                           @RequestParam String description,
+                           @RequestParam("file") MultipartFile file) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        product.setName(name);
-        product.setDescription(description);
-        productRepo.save(product);
+        String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            s3Amazon.uploadFile(resultFileName, file);
+            s3Amazon.deleteFile(product.getFileName());
+            product.setFileName(resultFileName);
+        }
+            product.setName(name);
+            product.setDescription(description);
+            productRepo.save(product);
         return "redirect:/";
     }
 

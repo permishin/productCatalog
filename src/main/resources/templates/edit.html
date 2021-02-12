@@ -17,10 +17,13 @@
                 <div class="p-3 border bg-light">
                     <h5>Редактировать продукт</h5>
                     <div th:each="el : ${user}">
-                        <form method="post">
+                        <form method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <img th:src="${uploadPath} + '/' + ${el.getFileName()}" width="150" height="150">
+                            <input type="file" name="file">
                             <input type="text" th:value="${el.getName()}" name="name"
-                                   placeholder="Введите название статьи" class="form-control"><br>
-                            <textarea name="description" placeholder="Введите полный текст статьи" class="form-control"
+                                   placeholder="Товар" class="form-control"><br>
+                            <textarea name="description" placeholder="Описание" class="form-control"
                                       th:text="${el.getDescription()}"/><br>
                             <button type="submit" class="btn btn-success">Обновить</button>
                             <button href="/" class="btn btn-warning">Отмена</button>
