@@ -12,17 +12,8 @@
 <div class="container">
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
-<form action="/user" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <input type="text" th:value="${user.getUsername()}" name="username"/>
-    <input type="text" th:value="${user.getPassword()}" name="password"/>
-    <td th:each="role : ${roles}">
-        <div>
-        <label><input th:name="${role}" class="form-check-input-pt-3-mt-2" type="checkbox" th:checked="*{user.getRoles.contains(role)}"/><span th:text="${role.name()}"/></label>
-        </div>
-    </td>
-    <button type="submit">Save</button>
-</form>
+<h3>HTTP Status 403 - Access is denied</h3>
+<h3 th:text="${msg}"/>
         </div>
     </div>
 </div>

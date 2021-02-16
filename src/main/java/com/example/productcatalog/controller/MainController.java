@@ -117,4 +117,15 @@ public class MainController {
         model.addAttribute("list", product);
         return "main";
     }
+
+    @GetMapping("/403")
+    public String accessDenied(Model model) {
+        model.addAttribute("msg", "Вы сломали интернет!");
+        return "403";
+    }
+
+    @GetMapping("/test")
+    public String test(Model model) {
+        return "test";
+    }
 }

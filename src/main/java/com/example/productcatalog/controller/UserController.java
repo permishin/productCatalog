@@ -40,9 +40,11 @@ public class UserController {
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
-            @RequestParam("userId") User user) {
+            @RequestParam("userId") User user,
+            @RequestParam String password) {
 
         user.setUsername(username);
+        user.setPassword(password);
         user.getRoles().clear();
 
         Set<String> roles = Arrays.stream(Role.values())
@@ -63,4 +65,5 @@ public class UserController {
         userRepo.delete(user);
         return "redirect:/user";
     }
+
 }

@@ -29,7 +29,6 @@
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">№</th>
                     <th scope="col">Фото</th>
                     <th scope="col">Наименование</th>
                     <th scope="col">Описание</th>
@@ -40,7 +39,6 @@
                 <tbody>
                 <div th:each="i : ${list}">
                     <tr>
-                        <td th:text="${i.getId()}"/>
                         <td th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></td>
                         <td th:text="${i.getName()}"/>
                         <td th:text="${i.getDescription()}"/>

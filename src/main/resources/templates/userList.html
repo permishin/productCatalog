@@ -13,23 +13,25 @@
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
 List of users
-<table>
+<table class="table">
     <thead>
     <tr>
-        <th>Имя</th>
-        <th>Роль</th>
-        <th></th>
+        <th scope="col">Имя</th>
+        <th scope="col">Роль</th>
+        <th scope="col">Действие</th>
     </tr>
     </thead>
     <tbody>
     <div th:each="a : ${users}">
     <tr>
         <td th:text="${a.getUsername()}"/>
-        <td th:each="role : ${a.getRoles()}">
-            <div th:text="${role.name()}"/></td>
-        <td> <a th:href="'/user/' + ${a.getId()}">Edit</a></td>
         <td>
+            <div th:each="role : ${a.getRoles()}">
+        <div th:text="${role.name()}"/></div></td>
+        <td>
+          <!--  <a class="btn btn-primary" href="#" role="button">Link</a> -->
             <form th:action="'/user/' + ${a.getId()} + '/remove'" method="post">
+                <a th:href="'/user/' + ${a.getId()}" class="btn btn-success" type="submit">Edit</a>
                 <button class="btn btn-warning" type="submit">Удалить</button>
             </form>
         </td>
