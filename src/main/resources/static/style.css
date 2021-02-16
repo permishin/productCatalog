@@ -12,9 +12,10 @@
 /* Control the left side */
 .left {
     left: 0;
-    background-image: url(15.jpg);
-    background-position: left, top;
+    background-image: url(17.jpg);
+    background-position: right;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 /* Control the right side */

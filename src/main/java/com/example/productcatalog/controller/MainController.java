@@ -124,8 +124,9 @@ public class MainController {
         return "403";
     }
 
-    @GetMapping("/test")
-    public String test(Model model) {
-        return "test";
-    }
+
+//    @GetMapping("/test")
+//    public String test(Model model) {
+//        return "login";
+//    }
 }

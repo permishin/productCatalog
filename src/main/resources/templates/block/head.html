@@ -3,6 +3,9 @@
         <h5 class="my-0 mr-md-auto font-weight-normal">Каталог продуктов</h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <form th:action="@{/logout}" method="post">
+                <span sec:authorize="!isAuthenticated()">
+                    <h5 class="my-0 mr-md-auto font-weight-normal">Страница авторизации</h5>
+                </span>
                 <span sec:authorize="isAuthenticated()">
             <a class="p-2 text-dark" href="/">Главная</a>
             <a class="p-2 text-dark" href="/user">Пользователи</a>
