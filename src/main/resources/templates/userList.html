@@ -12,7 +12,6 @@
 <div class="container">
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
-List of users
 <table class="table">
     <thead>
     <tr>
@@ -31,8 +30,8 @@ List of users
         <td>
           <!--  <a class="btn btn-primary" href="#" role="button">Link</a> -->
             <form th:action="'/user/' + ${a.getId()} + '/remove'" method="post">
-                <a th:href="'/user/' + ${a.getId()}" class="btn btn-success" type="submit">Edit</a>
-                <button class="btn btn-warning" type="submit">Удалить</button>
+                <a th:href="'/user/' + ${a.getId()}" class="btn btn-warning" type="submit">Редактировать</a>
+                <button class="btn btn-danger" type="submit">Удалить</button>
             </form>
         </td>
     </tr>
