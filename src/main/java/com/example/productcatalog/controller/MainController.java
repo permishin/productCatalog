@@ -93,6 +93,7 @@ public class MainController {
     public String PostEdit(@PathVariable(value = "id") Long id,
                            @RequestParam String name,
                            @RequestParam String description,
+                           @RequestParam Double price,
                            @RequestParam("file") MultipartFile file) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
@@ -103,18 +104,21 @@ public class MainController {
         }
             product.setName(name);
             product.setDescription(description);
+            product.setPrice(price);
             productRepo.save(product);
         return "redirect:/";
     }
 
     @PostMapping("/filter")
-    public String filter(@RequestParam String filter, Model model) {
+    public String filter(@RequestParam (defaultValue = "")String filter, Model model) {
         Iterable<Product> product;
         if (filter != null && !filter.isEmpty()) {
-            product = productRepo.findByName(filter);
+            product = productRepo.findByNameIsContaining(filter);
         } else {
             product = productRepo.findAll();
         }
+        model.addAttribute("filterView", filter);
+        model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", product);
         return "main";
     }

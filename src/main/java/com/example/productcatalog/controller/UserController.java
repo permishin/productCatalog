@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,7 +37,7 @@ public class UserController {
         return "userEdit";
     }
 
-    @PostMapping
+    @PostMapping()
     public String userSave(
             @RequestParam String username,
             @RequestParam Map<String, String> form,
@@ -63,6 +64,18 @@ public class UserController {
     public String deleteUser(@PathVariable Long id) {
         User user = userRepo.findById(id).orElseThrow(IllegalStateException::new);
         userRepo.delete(user);
+        return "redirect:/user";
+    }
+    @PostMapping("/addUser")
+    public String addNewUser(User user, Map<String, Object> model) {
+        User userFromDb = userRepo.findByUsername(user.getUsername());
+        if (userFromDb != null) {
+            model.put("message", "Такой юзер уже существует!");
+            return "redirect:/user";
+        }
+        user.setActive(true);
+        user.setRoles(Collections.singleton(Role.USER));
+        userRepo.save(user);
         return "redirect:/user";
     }
 

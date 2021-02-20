@@ -12,7 +12,7 @@
         <div class="p-3 border bg-light">
             <form method="post" action="/filter">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                <input type="text" placeholder="Фильтр" name="filter"/>
+                <input type="text" placeholder="Фильтр" th:value="${filterView}" name="filter" />
                 <button type="submit" class="btn btn-success">Найти</button>
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Добавить товар</button>
             </form>
@@ -79,8 +79,8 @@
             <div class="modal-body">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="mb-3">
-                        <label for="recipient-name" class="col-form-label">Фото:</label><br>
-                        <input type="file" name="file" th:class="my-3">
+                        <label for="formFile" class="form-label">Фото:</label><br>
+                        <input class="form-control" type="file" id="formFile" th:class="my-3">
                     </div>
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Наименование:</label>
