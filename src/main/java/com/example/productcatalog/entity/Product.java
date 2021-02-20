@@ -14,13 +14,14 @@ public class Product {
     private long id;
 
     private String name, description, fileName;
-
+    private Double price;
     public Product() {
     }
 
-    public Product(String name, String description) {
+    public Product(String name, String description, Double price) {
         this.name = name;
         this.description = description;
+        this.price = price;
     }
 
     public Long getId() {
@@ -53,5 +54,13 @@ public class Product {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }

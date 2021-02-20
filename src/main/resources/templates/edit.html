@@ -2,13 +2,10 @@
 <html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${title}"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <header th:insert="block/header :: header"/>
 </head>
 <body>
-<header th:insert="block/head :: header"/>
+<header th:insert="block/menu :: menu"/>
 
 <div class="container">
     <div class="row">
@@ -23,6 +20,8 @@
                             <input type="file" name="file" th:class="my-3">
                             <input type="text" th:value="${el.getName()}" name="name"
                                    placeholder="Товар" class="form-control"><br>
+                            <input type="text" th:value="${el.getPrice()}" name="price"
+                                   placeholder="Цена" class="form-control"><br>
                             <textarea name="description" placeholder="Описание" class="form-control"
                                       th:text="${el.getDescription()}"/><br>
                             <button type="submit" class="btn btn-success">Обновить</button>

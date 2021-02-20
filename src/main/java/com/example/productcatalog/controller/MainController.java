@@ -45,9 +45,10 @@ public class MainController {
     public String add(
             @RequestParam String name,
             @RequestParam String description,
+            @RequestParam Double price,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
-        Product product = new Product(name, description);
+        Product product = new Product(name, description, price);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             String uuidFile = UUID.randomUUID().toString();
@@ -123,10 +124,4 @@ public class MainController {
         model.addAttribute("msg", "Вы сломали интернет!");
         return "403";
     }
-
-
-//    @GetMapping("/test")
-//    public String test(Model model) {
-//        return "login";
-//    }
 }
