@@ -76,7 +76,6 @@ public class ShoppingController {
     @GetMapping("/orders")
     public String orders(Model model) {
         Iterable<Order> list = orderRepo.findAll();
-
         model.addAttribute("order", list);
         return "orders";
     }

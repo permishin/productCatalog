@@ -38,13 +38,12 @@ public class MainController {
     @GetMapping("/")
     public String main(HttpServletRequest request,
                        Model model) {
-        HttpSession session = request.getSession();
-        CartBean bean = CartBean.get(session);
+
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("title", "Каталог товаров");
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
-        model.addAttribute("quantity", bean.quantity());
+        model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
     }
 

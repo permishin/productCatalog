@@ -1,5 +1,6 @@
 package com.example.productcatalog.controller;
 
+import com.example.productcatalog.entity.CartBean;
 import com.example.productcatalog.entity.Role;
 import com.example.productcatalog.entity.User;
 import com.example.productcatalog.repo.UserRepo;
@@ -8,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -25,15 +28,21 @@ public class UserController {
     }
 
     @GetMapping
-    public String userList(Model model) {
+    public String userList(HttpServletRequest request,
+                           Model model) {
         model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "userList";
     }
 
     @GetMapping("{user}")
-    public String userEdit(@PathVariable User user, Model model) {
+    public String userEdit(HttpServletRequest request,
+                           @PathVariable User user,
+                           Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
+        model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
+
         return "userEdit";
     }
 
@@ -42,7 +51,8 @@ public class UserController {
             @RequestParam String username,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user,
-            @RequestParam String password) {
+            @RequestParam String password,
+            Model model) {
 
         user.setUsername(username);
         user.setPassword(password);
@@ -67,12 +77,21 @@ public class UserController {
         return "redirect:/user";
     }
     @PostMapping("/addUser")
-    public String addNewUser(User user, Map<String, Object> model) {
+    public String addNewUser(@RequestParam String username,
+                             User user, Map<String, Object> model) {
         User userFromDb = userRepo.findByUsername(user.getUsername());
         if (userFromDb != null) {
             model.put("message", "Такой юзер уже существует!");
-            return "redirect:/user";
+            model.put("users", userRepo.findAll());
+            return "userList";
         }
+
+        if (username == null || username == "") {
+            model.put("message", "Поле логин не может быть пустым");
+            model.put("users", userRepo.findAll());
+            return "userList";
+        }
+
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         userRepo.save(user);
