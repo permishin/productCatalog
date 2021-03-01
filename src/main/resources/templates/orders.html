@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <header th:insert="block/header :: header"/>
+</head>
+<body>
+<header th:insert="block/menu :: menu"/>
+<div class="container">
+<div th:each="i : ${order}">
+    <span th:text="${i}"/>
+</div>
+</div>
+</body>
+</html>

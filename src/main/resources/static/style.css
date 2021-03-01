@@ -23,6 +23,7 @@
 .right {
     right: 0;
     background-color: #ffffff;
+
 }
 
 /* If you want the content centered horizontally and vertically */
@@ -31,7 +32,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    text-align: center;
+    text-align: left;
 }
 
 /* Style the image inside the centered container, if needed */

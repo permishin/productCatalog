@@ -30,6 +30,10 @@ public class RegistrationController {
             model.put("message", "Такой юзер уже существует!");
             return "registration";
         }
+        if(!user.getPassword().equals(user.getPasswordRetry())) {
+            model.put("message", "Введенные пароли не совпадают. Пароли должны быть одинаковыми!");
+            return "registration";
+        }
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         userRepo.save(user);

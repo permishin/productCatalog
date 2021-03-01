@@ -1,5 +1,6 @@
 package com.example.productcatalog.controller;
 
+import com.example.productcatalog.entity.CartBean;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.plugin.S3Amazon;
 import com.example.productcatalog.repo.ProductRepo;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -20,7 +23,7 @@ import java.util.UUID;
 @Controller
 public class MainController {
 
-    private S3Amazon s3Amazon;
+    private final S3Amazon s3Amazon;
     private final ProductRepo productRepo;
 
 
@@ -33,19 +36,23 @@ public class MainController {
     private String uploadPath;
 
     @GetMapping("/")
-    public String main(Model model) {
+    public String main(HttpServletRequest request,
+                       Model model) {
+        HttpSession session = request.getSession();
+        CartBean bean = CartBean.get(session);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("title", "Каталог товаров");
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
+        model.addAttribute("quantity", bean.quantity());
         return "main";
     }
 
     @PostMapping("/")
     public String add(
-            @RequestParam String name,
-            @RequestParam String description,
-            @RequestParam Double price,
+            @RequestParam (defaultValue = "Без названия")String name,
+            @RequestParam (defaultValue = "Без описания")String description,
+            @RequestParam (defaultValue = "0")Double price,
             @RequestParam("file") MultipartFile file,
             Model model) throws IOException {
         Product product = new Product(name, description, price);
@@ -55,6 +62,8 @@ public class MainController {
             String resultFileName = uuidFile + "." + file.getOriginalFilename();
             product.setFileName(resultFileName);
             s3Amazon.uploadFile(resultFileName, file);
+        } else {
+            product.setFileName("404.jpg");
         }
         productRepo.save(product);
         Iterable<Product> list = productRepo.findAll();
@@ -67,7 +76,9 @@ public class MainController {
     public String delete(@PathVariable(value = "id") Long id) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         try {
-            s3Amazon.deleteFile(product.getFileName());
+            if (!product.getFileName().equals("404.jpg")) {
+                s3Amazon.deleteFile(product.getFileName());
+            }
         } catch (IllegalArgumentException a) {
             a.getMessage();
         }
@@ -99,7 +110,9 @@ public class MainController {
         String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
         if (file != null && !file.getOriginalFilename().isEmpty()) {
             s3Amazon.uploadFile(resultFileName, file);
-            s3Amazon.deleteFile(product.getFileName());
+            if (!product.getFileName().equals("404.jpg")) {
+                s3Amazon.deleteFile(product.getFileName());
+            }
             product.setFileName(resultFileName);
         }
             product.setName(name);

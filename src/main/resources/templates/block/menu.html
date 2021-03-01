@@ -9,6 +9,8 @@
                 <span sec:authorize="isAuthenticated()">
             <a class="p-2 text-dark" href="/">Главная</a>
             <a class="p-2 text-dark" href="/user">Пользователи</a>
+                    <a class="p-2 text-dark" href="/shoppingCart">Корзина (<span th:text="${quantity}"></span>)</a>
+                     <a class="p-2 text-dark" href="/orders">Заказы</a>
                 <input type="submit" class="btn btn-success" value="Выход"/>
             </span>
 

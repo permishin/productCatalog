@@ -27,12 +27,16 @@
         <form th:action="@{/registration}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group">
-                <label for="exampleInputEmail1">Новый логин:</label>
+                <label for="exampleInputEmail1">Имя пользователя:</label>
                 <input type="text" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Придумайте логин">
             </div>
             <div class="form-group">
-                <label for="exampleInputPassword1">Новый пароль:</label>
+                <label for="exampleInputPassword1">Пароль:</label>
                 <input type="password" class="form-control" name="password" id="exampleInputPassword1" placeholder="Введите пароль">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Подтверждение пароля:</label>
+                <input type="password" class="form-control" name="passwordRetry" id="exampleInputPassword2" placeholder="Повторите пароль">
             </div>
             <button type="submit" class="btn btn-primary">Sign IN</button><a class="col-4 mr-auto ml-3" th:href="@{/login}">Cancel</a>
         </form>

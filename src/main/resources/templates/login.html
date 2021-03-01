@@ -24,7 +24,7 @@
         <form th:action="@{/login}" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <div class="form-group">
-                <label for="exampleInputEmail1">Логин:</label>
+                <label for="exampleInputEmail1" >Имя пользователя:</label>
                 <input type="login" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Введите логин">
                 <small id="emailHelp" class="form-text text-muted">Не разглашайте свой логин, даже если очень хочется.</small>
             </div>
