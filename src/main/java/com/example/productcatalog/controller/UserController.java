@@ -86,7 +86,7 @@ public class UserController {
             return "userList";
         }
 
-        if (username == null || username == "") {
+        if (username == null || username == "" || username.contains(" ")) {
             model.put("message", "Поле логин не может быть пустым");
             model.put("users", userRepo.findAll());
             return "userList";
