@@ -14,7 +14,9 @@
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                 <div class="row g-3 align-items-center">
                     <div class="col-auto">
-                        <input type="text" class="form-control" placeholder="Фильтр" th:value="${filterView}" name="filter">
+                        <form class="d-flex">
+                            <input type="search" class="form-control me-2" placeholder="Фильтр" th:value="${filterView}" name="filter">
+                        </form>
                     </div>
                     <div class="col-auto">
                         <button type="submit" class="btn btn-success">Найти</button>
@@ -33,7 +35,7 @@
                 <thead>
                 <tr>
                     <th scope="col" width="30">Фото</th>
-                    <th scope="col" width="50">Наименование</th>
+                    <th scope="col" width="50">Товар</th>
                     <th scope="col" width="50">Цена</th>
                     <th scope="col" width="110">Описание</th>
                     <th scope="col" width="170">Действие</th>
@@ -42,13 +44,13 @@
                 <tbody>
                 <div th:each="i : ${list}">
                     <tr>
-                        <td width="30" th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></td>
+                        <td width="30" th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" class="rounded float-start" width="150" height="150"></td>
                         <td width="50" th:text="${i.getName()}"/>
                         <td width="50" th:text="${i.getPrice()}"/>
                         <td width="110" th:text="${i.getDescription()}"/>
                         <td width="170">
-                             <div class="dropdown">
-                                    <form th:action="${i.getId()} + '/remove'" method="post">
+                            <div class="dropdown">
+                                <form th:action="${i.getId()} + '/remove'" method="post">
                                     <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         Выбрать
                                     </button>
@@ -57,8 +59,8 @@
                                         <li><a th:href="${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></li>
                                         <li><button class="dropdown-item" type="submit">Удалить</button></li>
                                     </ul>
-                                    </form>
-                                </div>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 </div>
@@ -76,7 +78,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form action="/" method="post" enctype="multipart/form-data">
-            <div class="modal-body">
+                <div class="modal-body">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Фото:</label><br>
@@ -86,20 +88,20 @@
                         <label for="recipient-name" class="col-form-label">Наименование:</label>
                         <input type="text" class="form-control" id="recipient-name" name="name" placeholder="Наименование">
                     </div>
-                <div class="mb-3">
-                    <label for="recipient-price" class="col-form-label">Цена:</label>
-                    <input type="text" class="form-control" id="recipient-price" name="price" placeholder="Цена">
-                </div>
+                    <div class="mb-3">
+                        <label for="recipient-price" class="col-form-label">Цена:</label>
+                        <input type="text" class="form-control" id="recipient-price" name="price" placeholder="Цена">
+                    </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Описание:</label>
                         <textarea typeof="text" name="description" id="message-text" placeholder="Описание"
                                   class="form-control"></textarea>
                     </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-                <button type="submit" class="btn btn-success">Добавить</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="submit" class="btn btn-success">Добавить</button>
+                </div>
             </form>
         </div>
     </div>

@@ -31,7 +31,7 @@ public class RegistrationController {
             return "registration";
         }
         if(!user.getPassword().equals(user.getPasswordRetry())) {
-            model.put("message", "Введенные пароли не совпадают. Пароли должны быть одинаковыми!");
+            model.put("message", "Введенные пароли не совпадают! Пишите медленнее и более вдумчиво...");
             return "registration";
         }
         user.setActive(true);

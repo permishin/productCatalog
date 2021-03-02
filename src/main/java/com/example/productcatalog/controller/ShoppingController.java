@@ -62,23 +62,13 @@ public class ShoppingController {
     }
 
     @PostMapping("/makeOrder")
-    public String makeOrder(HttpServletRequest request,
-                            Model model) {
+    public String makeOrder(HttpServletRequest request) {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
         Order order = new Order();
         order.setOrderProductList(bean.getProd());
         orderRepo.save(order);
-        
-        //session.removeAttribute();
+        bean.deleteAll(bean);
         return "redirect:/orders";
     }
-    @GetMapping("/orders")
-    public String orders(Model model) {
-        Iterable<Order> list = orderRepo.findAll();
-        model.addAttribute("order", list);
-        return "orders";
-    }
-
-
 }

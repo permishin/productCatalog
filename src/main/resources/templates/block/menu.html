@@ -9,8 +9,11 @@
                 <span sec:authorize="isAuthenticated()">
             <a class="p-2 text-dark" href="/">Главная</a>
             <a class="p-2 text-dark" href="/user">Пользователи</a>
-                    <a class="p-2 text-dark" href="/shoppingCart">Корзина (<span th:text="${quantity}"></span>)</a>
-                     <a class="p-2 text-dark" href="/orders">Заказы</a>
+                    <a href="/shoppingCart" type="button" class="btn btn-primary">
+  Корзина <span class="badge badge-light"><span th:text="${quantity}"></span></span>
+  <span class="sr-only">unread messages</span>
+</a>
+                    <a class="p-2 text-dark" href="/orders">Заказы</a>
                 <input type="submit" class="btn btn-success" value="Выход"/>
             </span>
 

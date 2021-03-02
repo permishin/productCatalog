@@ -8,9 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
@@ -87,7 +85,7 @@ public class UserController {
         }
 
         if (username == null || username == "" || username.contains(" ")) {
-            model.put("message", "Поле логин не может быть пустым");
+            model.put("message", "Поле Логин не может быть пустым и содержать пробелы");
             model.put("users", userRepo.findAll());
             return "userList";
         }

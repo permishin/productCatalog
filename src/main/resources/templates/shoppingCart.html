@@ -11,16 +11,21 @@
     <div class="product-preview-container" th:each="i : ${cartForm.prod}">
         <ul>
             <form method="post" th:action="${i.getId()} + '/shoppingCart'">
-            <li><span th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></span></li>
-            <li><span th:text="${i.getName()}"></span></li>
-            <li><span th:text="${i.getPrice()}"></span></li>
+                <li><span th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></span></li>
+                <li><span th:text="${i.getName()}"></span></li>
+                <li><span th:text="${i.getPrice()}"></span></li>
                 <li><button class="dropdown-item" type="submit">Удалить</button></li>
             </form>
         </ul>
     </div>
-    <div> Товаров в корзине: <span th:text="${quantity}"></span> </div>
-    <div> Общая стоимость: <span th:text="${totalCost}"></span></div>
-    <form th:action="@{/makeOrder}" method="post"><button type="submit" class="btn btn-primary">Создать заказ</button></form>
+    <form th:action="@{/makeOrder}" method="post">
+        <div class="col-auto">
+            <div> Товаров в корзине: <span th:text="${quantity}"></span></div>
+            <div> Общая стоимость: <span th:text="${totalCost}"></span></div>
+            <a class="btn btn-primary" href="/" role="button">Продолжить покупки</a>
+            <button type="submit" class="btn btn-primary">Создать заказ</button>
+        </div>
+    </form>
 </div>
 </body>
 </html>
