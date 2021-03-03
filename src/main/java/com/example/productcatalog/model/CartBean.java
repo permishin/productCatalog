@@ -1,10 +1,10 @@
-package com.example.productcatalog.entity;
+package com.example.productcatalog.model;
+
+import com.example.productcatalog.entity.Product;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class CartBean {
 
@@ -55,4 +55,6 @@ public class CartBean {
     public synchronized void deleteAll(CartBean bean) {
             bean.prod.clear();
     }
+
 }
+

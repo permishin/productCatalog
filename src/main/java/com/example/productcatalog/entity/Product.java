@@ -12,6 +12,7 @@ public class Product {
 
     private String name, description, fileName;
     private Double price;
+    private Integer count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Order order;
@@ -23,6 +24,14 @@ public class Product {
         this.name = name;
         this.description = description;
         this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Order getOrder() {

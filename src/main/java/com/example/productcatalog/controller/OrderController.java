@@ -1,6 +1,6 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.entity.CartBean;
+import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Order;
 import com.example.productcatalog.repo.OrderRepo;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 

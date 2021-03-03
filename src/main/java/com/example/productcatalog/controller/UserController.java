@@ -1,6 +1,6 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.entity.CartBean;
+import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Role;
 import com.example.productcatalog.entity.User;
 import com.example.productcatalog.repo.UserRepo;

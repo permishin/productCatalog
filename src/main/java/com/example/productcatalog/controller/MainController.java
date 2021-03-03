@@ -1,6 +1,6 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.entity.CartBean;
+import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.plugin.S3Amazon;
 import com.example.productcatalog.repo.ProductRepo;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -64,6 +63,7 @@ public class MainController {
         } else {
             product.setFileName("404.jpg");
         }
+        product.setCount(1);
         productRepo.save(product);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("uploadPath", uploadPath);
