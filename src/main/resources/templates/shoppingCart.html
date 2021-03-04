@@ -16,6 +16,13 @@
                 <li><span th:text="${i.getPrice()}"></span></li>
                 <li><button class="dropdown-item" type="submit">Удалить</button></li>
             </form>
+            <div class="col-sm-4">
+                <form method="post" th:action="${i.getId()} +'/updateCount'">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="text" id="inputPassword6" name="count" th:value="${i.getCount()}" class="form-control" aria-describedby="passwordHelpInline">
+                    <button type="submit" class="btn btn-success">Обновить количество</button>
+                </form>
+            </div>
         </ul>
     </div>
     <form th:action="@{/makeOrder}" method="post">

@@ -40,7 +40,7 @@
                                             <td width="30" th:if="${uploadPath} + '/' + ${z.getFileName()}"><img th:src="${uploadPath} + '/' + ${z.getFileName()}" class="rounded float-start" width="50" height="50"/></td>
                                             <td width="50" th:text="${z.getName()}"/>
                                             <td width="50" th:text="${z.getPrice()}"/>
-                                            <td>0</td>
+                                            <td width="50" th:text="${z.getCount()}">
                                         </tr>
                                     </div>
                                     </tbody>

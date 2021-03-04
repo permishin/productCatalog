@@ -48,17 +48,17 @@
                         <td width="50" th:text="${i.getName()}"/>
                         <td width="50" th:text="${i.getPrice()}"/>
                         <td width="110" th:text="${i.getDescription()}"/>
-                        <td width="170">
-                            <div class="dropdown">
+                        <td>
+                            <div class="dropdown ml-auto">
                                 <form th:action="${i.getId()} + '/remove'" method="post">
                                     <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         Выбрать
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a th:href="@{|/buyProduct?id=${i.getId()}|}" class="dropdown-item">В корзину</a></li>
                                         <li><a th:href="${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></li>
                                         <li><button class="dropdown-item" type="submit">Удалить</button></li>
                                     </ul>
+                                    <a th:href="@{|/buyProduct?id=${i.getId()}|}" class="btn btn-success">В корзину</a>
                                 </form>
                             </div>
                         </td>

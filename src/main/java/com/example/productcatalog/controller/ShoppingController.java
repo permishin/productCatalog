@@ -31,11 +31,15 @@ public class ShoppingController {
     @RequestMapping({ "/buyProduct" })
     public String listProductHandler(HttpServletRequest request,
                                      Model model,
-                                     @RequestParam(value = "id", defaultValue = "") Long id) {
+                                     @RequestParam(value = "id", defaultValue = "") Long id){
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
         Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
-        bean.addItemProduct(product);
+        bean.findID(id);
+        if(bean.findIDNoAdd(id) == false) {
+            bean.addItemProduct(product);
+        }
+        product.setCount(1);
         model.addAttribute("cart", bean);
         return "redirect:/shoppingCart";
     }
@@ -58,6 +62,20 @@ public class ShoppingController {
         CartBean bean = CartBean.get(session);
         Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
         bean.deleteItemProduct(product);
+        return "redirect:/shoppingCart";
+    }
+
+    @PostMapping("/{id}/updateCount")
+    public String updateCount(HttpServletRequest request,
+                              @RequestParam Integer count,
+                              @PathVariable(value = "id") Long id) {
+        HttpSession session = request.getSession();
+        CartBean bean = CartBean.get(session);
+        bean.getProd().get(bean.number(id)).setCount(count);
+        if(count == 0) {
+            Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
+            bean.deleteItemProduct(product);
+        }
         return "redirect:/shoppingCart";
     }
 
