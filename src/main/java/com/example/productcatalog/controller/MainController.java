@@ -32,7 +32,7 @@ public class MainController {
 
     @Value("${upload.path}")
     private String uploadPath;
-
+    //Гет страницы продуктов
     @GetMapping("/")
     public String main(HttpServletRequest request,
                        Model model) {
@@ -44,7 +44,7 @@ public class MainController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
     }
-
+    //Добавление нового продукта
     @PostMapping("/")
     public String add(
             @RequestParam (defaultValue = "Без названия")String name,
@@ -69,7 +69,7 @@ public class MainController {
         model.addAttribute("list", list);
         return "main";
     }
-
+    //Удаление продукта
     @PostMapping("/{id}/remove")
     public String delete(@PathVariable(value = "id") Long id) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
@@ -83,7 +83,7 @@ public class MainController {
         productRepo.delete(product);
         return "redirect:/";
     }
-
+    //Страница редактирование продукта
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(value = "id") Long id,
                        Model model) {
@@ -98,7 +98,7 @@ public class MainController {
         model.addAttribute("title", "Редактировать продукт");
         return "edit";
     }
-
+    //Пост редактирования продукта
     @PostMapping("/{id}/edit")
     public String PostEdit(@PathVariable(value = "id") Long id,
                            @RequestParam String name,
@@ -120,7 +120,7 @@ public class MainController {
             productRepo.save(product);
         return "redirect:/";
     }
-
+    //Фильтер
     @PostMapping("/filter")
     public String filter(@RequestParam (defaultValue = "") String filter,
                          Model model) {
@@ -135,7 +135,7 @@ public class MainController {
         model.addAttribute("list", product);
         return "main";
     }
-
+    //Страница не найдена или нет доступа
     @GetMapping("/403")
     public String accessDenied(Model model) {
         model.addAttribute("msg", "Вы сломали интернет!");

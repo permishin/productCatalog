@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public class ShoppingController {
         this.orderRepo = orderRepo;
         this.productListOrderRepo = productListOrderRepo;
     }
-
+    //Кнопка добавить продукт в корзину
     @RequestMapping({ "/buyProduct" })
     public String listProductHandler(HttpServletRequest request,
                                      Model model,
@@ -51,6 +50,7 @@ public class ShoppingController {
         model.addAttribute("cart", bean);
         return "redirect:/shoppingCart";
     }
+    //Корзина
     @GetMapping("/shoppingCart")
     public String shoppingCart(HttpServletRequest request,
                                Model model) {
@@ -62,7 +62,7 @@ public class ShoppingController {
         model.addAttribute("quantity", bean.quantity());
         return "shoppingCart";
     }
-
+    //Удалить продукт из корзины
     @PostMapping("/{id}/shoppingCart")
     public String remoteProduct(HttpServletRequest request,
                                 @PathVariable(value = "id") Long id) {
@@ -72,7 +72,7 @@ public class ShoppingController {
         bean.deleteItemProduct(product);
         return "redirect:/shoppingCart";
     }
-
+    //Обновить количество продукта в корзине
     @PostMapping("/{id}/updateCount")
     public String updateCount(HttpServletRequest request,
                               @RequestParam Integer count,
@@ -86,7 +86,7 @@ public class ShoppingController {
         }
         return "redirect:/shoppingCart";
     }
-
+    //Создать заказ
     @PostMapping("/makeOrder")
     public String makeOrder(HttpServletRequest request,
                             @RequestParam(name = "email") String email,

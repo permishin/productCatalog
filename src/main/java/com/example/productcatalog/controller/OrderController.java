@@ -9,6 +9,7 @@ import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
+@PreAuthorize("hasAuthority('ADMIN')")
 public class OrderController {
 
     private final OrderRepo orderRepo;
@@ -35,7 +37,7 @@ public class OrderController {
 
     @Value("${upload.path}")
     private String uploadPath;
-
+    // Гет страницы orders
     @GetMapping("/orders")
     public String orders(HttpServletRequest request,
                          Model model) {
@@ -45,13 +47,14 @@ public class OrderController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "orders";
     }
+    // Пост удаления заказа
     @PostMapping("/{order_id}/orderDelete")
     public String deleteOrder(@PathVariable(value = "order_id") Long order_id){
         Orders orders = orderRepo.findById(order_id).orElseThrow(IllegalStateException::new);
         orderRepo.delete(orders);
         return "redirect:/orders";
     }
-
+    //Страница редактирования заказа
     @GetMapping("/orders/{id}/edit")
     public String orderEdit(@PathVariable(value = "id") Long id,
                             Model model) {
@@ -89,12 +92,11 @@ public class OrderController {
         }
         return "redirect:/orders/{id}/edit";
     }
-    //Изменит количество продукта в заказе
+    //Изменить количество продукта в заказе
     @PostMapping("/orders/{id}/changeCount/{idProduct}")
     public String changeCount(@RequestParam Integer count,
                               @PathVariable (name = "idProduct") Long idProduct,
                               @PathVariable (name = "id") Long id) {
-       // Orders order = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
         ProductListOrder product = productListOrderRepo.findById(idProduct).orElseThrow(IllegalStateException::new);
         product.setCount(count);
         product.setCostFinal(product.getPriceFinal() * product.getCount());

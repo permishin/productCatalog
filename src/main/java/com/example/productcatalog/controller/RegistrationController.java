@@ -17,12 +17,12 @@ public class RegistrationController {
     public RegistrationController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
-
+    //Страница регистрации
     @GetMapping("/registration")
     public String registration() {
         return "registration";
     }
-
+    //Пост регистрации
     @PostMapping("/registration")
     public String addNewUser(User user, Map<String, Object> model) {
         User userFromDb = userRepo.findByUsername(user.getUsername());

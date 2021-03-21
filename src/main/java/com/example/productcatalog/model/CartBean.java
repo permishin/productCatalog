@@ -56,6 +56,7 @@ public class CartBean {
     public synchronized void deleteAll(CartBean bean) {
         bean.prod.clear();
     }
+
     public synchronized Boolean findID(Long id) {
         for(int i = 0; i < getProd().size(); i++) {
             if (getProd().get(i).getId().equals(id)) {

@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     private final UserRepo userRepo;
     public UserController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
-
+    //Геттер страница пользователей
     @GetMapping
     public String userList(HttpServletRequest request,
                            Model model) {
@@ -32,7 +32,7 @@ public class UserController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "userList";
     }
-
+    //Страница редактора пользователя
     @GetMapping("{user}")
     public String userEdit(HttpServletRequest request,
                            @PathVariable User user,
@@ -43,7 +43,7 @@ public class UserController {
 
         return "userEdit";
     }
-
+    //Метод пост редактора пользователя
     @PostMapping()
     public String userSave(
             @RequestParam String username,
@@ -66,13 +66,14 @@ public class UserController {
         userRepo.save(user);
         return "redirect:/user";
     }
-
+    //Удаление пользователя
     @PostMapping("/{id}/remove")
     public String deleteUser(@PathVariable Long id) {
         User user = userRepo.findById(id).orElseThrow(IllegalStateException::new);
         userRepo.delete(user);
         return "redirect:/user";
     }
+    //Добавление поьзователя
     @PostMapping("/addUser")
     public String addNewUser(@RequestParam String username,
                              User user, Map<String, Object> model) {
