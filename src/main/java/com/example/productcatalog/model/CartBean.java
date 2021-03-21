@@ -1,12 +1,19 @@
 package com.example.productcatalog.model;
 
+import com.example.productcatalog.entity.Orders;
 import com.example.productcatalog.entity.Product;
+import com.example.productcatalog.entity.ProductListOrder;
+import com.example.productcatalog.repo.ProductListOrderRepo;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class CartBean {
+
+    public CartBean() {
+    }
 
     private ArrayList<Product> prod = new ArrayList<Product>();
 
@@ -74,6 +81,21 @@ public class CartBean {
             }
         }
         return null;
+    }
+
+    public synchronized List saveSessionToProductListOrder (List<Product> product, Orders id) {
+        List<ProductListOrder> list = new ArrayList<>();
+        ProductListOrder productListOrder = null;
+        for (int i = 0; i < product.size(); i++) {
+            productListOrder = new ProductListOrder();
+            productListOrder.setProduct(product.get(i));
+            productListOrder.setPriceFinal(product.get(i).getPrice());
+            productListOrder.setCount(product.get(i).getCount());
+            productListOrder.setCostFinal(product.get(i).getPrice() * product.get(i).getCount());
+            productListOrder.setOrders(id);
+            list.add(productListOrder);
+        }
+        return list;
     }
 }
 

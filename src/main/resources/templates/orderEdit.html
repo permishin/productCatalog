@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <header th:insert="block/header :: header"/>
+</head>
+<body>
+<header th:insert="block/menu :: menu"/>
+
+<div class="container">
+    <div class="row align-items-start">
+    <div class="col px-md-5">
+        <div class="p-3 border bg-light">
+    <div th:each="i : ${orderEdit}">
+        <h5>Редактировать заказ № <span th:text="${i.getId}"/></h5>
+        <table>
+            <thead>
+            <tr>
+                <th>Корзина заказа</th>
+                <th>Добавить товары</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="col">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Фото</th>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Всего</th>
+                <th>Убрать</th>
+            </tr>
+            </thead>
+            <tbody>
+            <div th:each="z : ${i.getProductListOrder()}">
+                <tr>
+                    <form method="post" th:action="'/orders/' + ${i.getId()} + '/changeCount/' + ${z.getId()}">
+                    <td width="30" th:if="${uploadPath} + '/' + ${z.getProduct().getFileName()}"><img th:src="${uploadPath} + '/' + ${z.getProduct().getFileName()}" class="rounded float-start" width="50" height="50"/></td>
+                    <td width="50" th:text="${z.getProduct().getName()}"/>
+                    <td width="50" th:text="${z.getPriceFinal()}"/>
+                    <td><input type="number" th:value="${z.getCount()}" min="1" max="999" step="1" size="3"  name="count" required><button type="submit" class="btn btn-success">Save</button></td>
+                    <td width="50" th:text="${z.getCostFinal()}">
+                    <td><a th:href="'/orders/' + ${i.getId()} + '/deleteProduct/' + ${z.getProduct().getId()}" class="btn btn-success">-</a></td>
+                    </form>
+                </tr>
+
+            </div>
+            </tbody>
+        </table>
+                    </div>
+                </td>
+                <td>
+                    <div class="col">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Фото</th>
+                            <th>Товар</th>
+                            <th>Цена</th>
+                            <th>Добавить</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <div th:each="p : ${productList}">
+                        <tr>
+                                <td width="30" th:if="${uploadPath} + '/' + ${p.getFileName()}"><img th:src="${uploadPath} + '/' + ${p.getFileName()}" class="rounded float-start" width="50" height="50"/></td>
+                                <td width="50" th:text="${p.getName()}"/>
+                                <td width="50" th:text="${p.getPrice()}"/>
+                            <td><a th:href="'/orders/' + ${i.getId()} + '/addProduct/' + ${p.getId()}" class="btn btn-success">+</a></td>
+                        </tr>
+                        </div>
+                        </tbody>
+                    </table>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>

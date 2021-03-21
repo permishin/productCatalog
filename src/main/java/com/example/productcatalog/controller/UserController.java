@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('USER')")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     private final UserRepo userRepo;
@@ -49,8 +49,7 @@ public class UserController {
             @RequestParam String username,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user,
-            @RequestParam String password,
-            Model model) {
+            @RequestParam String password) {
 
         user.setUsername(username);
         user.setPassword(password);
@@ -83,13 +82,11 @@ public class UserController {
             model.put("users", userRepo.findAll());
             return "userList";
         }
-
         if (username == null || username == "" || username.contains(" ")) {
             model.put("message", "Поле Логин не может быть пустым и содержать пробелы");
             model.put("users", userRepo.findAll());
             return "userList";
         }
-
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         userRepo.save(user);

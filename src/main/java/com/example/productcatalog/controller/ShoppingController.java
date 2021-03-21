@@ -1,9 +1,11 @@
 package com.example.productcatalog.controller;
 
+import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.model.CartBean;
-import com.example.productcatalog.entity.Order;
+import com.example.productcatalog.entity.Orders;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repo.OrderRepo;
+import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,20 +14,26 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Controller
 public class ShoppingController {
 
-    private ProductRepo prodRepo;
+    private final ProductRepo prodRepo;
 
-    private OrderRepo orderRepo;
+    private final OrderRepo orderRepo;
+
+    private final ProductListOrderRepo productListOrderRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
 
-    public ShoppingController(ProductRepo prodRepo, OrderRepo orderRepo) {
+    public ShoppingController(ProductRepo prodRepo, OrderRepo orderRepo, ProductListOrderRepo productListOrderRepo) {
         this.prodRepo = prodRepo;
         this.orderRepo = orderRepo;
+        this.productListOrderRepo = productListOrderRepo;
     }
 
     @RequestMapping({ "/buyProduct" })
@@ -80,12 +88,20 @@ public class ShoppingController {
     }
 
     @PostMapping("/makeOrder")
-    public String makeOrder(HttpServletRequest request) {
+    public String makeOrder(HttpServletRequest request,
+                            @RequestParam(name = "email") String email,
+                            @RequestParam(name = "address") String address) {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
-        Order order = new Order();
-        order.setOrderProductList(bean.getProd());
-        orderRepo.save(order);
+        Orders orders = new Orders();
+        orders.setDate(new Date());
+        orders.setEmail(email);
+        orders.setAddress(address);
+        orderRepo.save(orders);
+        List<ProductListOrder> list = bean.saveSessionToProductListOrder(bean.getProd(), orders);
+        for(int i = 0; i < list.size(); i ++){
+            productListOrderRepo.save(list.get(i));
+        }
         bean.deleteAll(bean);
         return "redirect:/orders";
     }

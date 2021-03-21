@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -52,7 +51,7 @@ public class MainController {
             @RequestParam (defaultValue = "Без описания")String description,
             @RequestParam (defaultValue = "0")Double price,
             @RequestParam("file") MultipartFile file,
-            Model model) throws IOException {
+            Model model) {
         Product product = new Product(name, description, price);
 
         if (file != null && !file.getOriginalFilename().isEmpty()) {
@@ -86,7 +85,8 @@ public class MainController {
     }
 
     @GetMapping("/{id}/edit")
-    public String edit(@PathVariable(value = "id") Long id, Model model) {
+    public String edit(@PathVariable(value = "id") Long id,
+                       Model model) {
         if (!productRepo.existsById(id)) {
             return "redirect:/";
         }
@@ -122,7 +122,8 @@ public class MainController {
     }
 
     @PostMapping("/filter")
-    public String filter(@RequestParam (defaultValue = "")String filter, Model model) {
+    public String filter(@RequestParam (defaultValue = "") String filter,
+                         Model model) {
         Iterable<Product> product;
         if (filter != null && !filter.isEmpty()) {
             product = productRepo.findByNameIsContaining(filter);

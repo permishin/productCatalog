@@ -12,18 +12,21 @@
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
             <table class="table">
+                <div th:each="i : ${orders}">
                 <thead>
                 <tr>
                     <th scope="col" width="30">Заказ №</th>
+                    <th scope="col" width="30">Дата</th>
                     <th scope="col" width="30">Состав</th>
-                    <th scope="col" width="30">Редактировать</th>
+                    <th scope="col" width="30">К оплате</th>
+                    <th scope="col" width="30">Edit</th>
                 </tr>
                 </thead>
                 <tbody>
-                <div th:each="i : ${order}">
-                    <form method="post" th:action="${i.getOrder_id()} + '/orderDelete'">
+                    <form method="post" th:action="${i.getId()} + '/orderDelete'">
                         <tr>
-                            <td width="50" th:text="${i.getOrder_id()}"/>
+                            <td width="50" th:text="${i.getId()}"/>
+                            <td width="50" th:text="${i.getDate()}"/>
                             <td>
                                 <table>
                                     <thead>
@@ -32,25 +35,28 @@
                                         <th>Товар</th>
                                         <th>Цена</th>
                                         <th>Количество</th>
+                                        <th>Всего</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <div th:each="z : ${i.getOrderProductList()}">
+                                    <div th:each="z : ${i.getProductListOrder()}">
                                         <tr>
-                                            <td width="30" th:if="${uploadPath} + '/' + ${z.getFileName()}"><img th:src="${uploadPath} + '/' + ${z.getFileName()}" class="rounded float-start" width="50" height="50"/></td>
-                                            <td width="50" th:text="${z.getName()}"/>
-                                            <td width="50" th:text="${z.getPrice()}"/>
+                                            <td width="30" th:if="${uploadPath} + '/' + ${z.getProduct().getFileName()}"><img th:src="${uploadPath} + '/' + ${z.getProduct().getFileName()}" class="rounded float-start" width="50" height="50"/></td>
+                                            <td width="50" th:text="${z.getProduct().getName()}"/>
+                                            <td width="50" th:text="${z.getPriceFinal()}"/>
                                             <td width="50" th:text="${z.getCount()}">
+                                            <td width="50" th:text="${z.getCostFinal()}">
                                         </tr>
                                     </div>
                                     </tbody>
                                 </table>
                             </td>
+                            <td><a th:href="'/orders/' + ${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></td>
                         <td><button class="dropdown-item" type="submit">Удалить</button></td>
                         </tr>
                     </form>
-                </div>
                 </tbody>
+                </div>
             </table>
         </div>
     </div>

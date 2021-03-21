@@ -4,6 +4,7 @@ package com.example.productcatalog.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "product")
 public class Product {
 
     @Id
@@ -13,9 +14,6 @@ public class Product {
     private String name, description, fileName;
     private Double price;
     private Integer count;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Order order;
 
     public Product() {
     }
@@ -32,14 +30,6 @@ public class Product {
 
     public void setCount(Integer count) {
         this.count = count;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 
     public void setId(Long id) {
