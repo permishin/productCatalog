@@ -43,7 +43,7 @@ public class ShoppingController {
         CartBean bean = CartBean.get(session);
         Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
         bean.findID(id);
-        if(bean.findIDNoAdd(id) == false) {
+        if(!bean.findIDNoAdd(id)) {
             bean.addItemProduct(product);
         }
         product.setCount(1);
@@ -56,6 +56,10 @@ public class ShoppingController {
                                Model model) {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
+
+        if (bean.getProd().isEmpty()) {
+            model.addAttribute("message", "Корзина пуста! Для создания заказа, пожалуйста, добавьте товары.");
+        }
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("cartForm", bean);
         model.addAttribute("totalCost", bean.totalCost());
@@ -93,16 +97,21 @@ public class ShoppingController {
                             @RequestParam(name = "address") String address) {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
-        Orders orders = new Orders();
-        orders.setDate(new Date());
-        orders.setEmail(email);
-        orders.setAddress(address);
-        orderRepo.save(orders);
-        List<ProductListOrder> list = bean.saveSessionToProductListOrder(bean.getProd(), orders);
-        for(int i = 0; i < list.size(); i ++){
-            productListOrderRepo.save(list.get(i));
+
+        if (bean.getProd().isEmpty()) {
+            return "redirect:/shoppingCart";
+        } else {
+            Orders orders = new Orders();
+            orders.setDate(new Date());
+            orders.setEmail(email);
+            orders.setAddress(address);
+            orderRepo.save(orders);
+            List<ProductListOrder> list = bean.saveSessionToProductListOrder(bean.getProd(), orders);
+            for (ProductListOrder productListOrder : list) {
+                productListOrderRepo.save(productListOrder);
+            }
+            bean.deleteAll(bean);
+            return "redirect:/orders";
         }
-        bean.deleteAll(bean);
-        return "redirect:/orders";
     }
 }

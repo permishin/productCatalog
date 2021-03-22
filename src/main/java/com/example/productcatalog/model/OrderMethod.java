@@ -7,7 +7,7 @@ import com.example.productcatalog.entity.ProductListOrder;
 import java.util.List;
 
 public class OrderMethod {
-
+    //Добавить продукт в заказ (редактирование)
     public static synchronized List addProductToOrders(Product product, Orders order) {
         boolean isNew = false;
         List<ProductListOrder> productList = order.getProductListOrder();
@@ -33,7 +33,7 @@ public class OrderMethod {
         }
         return productList;
     }
-
+    //Удалить продукт из заказа
     public static synchronized List DeleteProductFromOrders(Product product, Orders order) {
        List<ProductListOrder> productList = order.getProductListOrder();
        for (int i = 0; i < productList.size(); i ++) {

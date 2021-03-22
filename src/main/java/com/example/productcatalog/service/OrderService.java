@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface OrderService {
 
-    List<OrdersModel> readAll();
+    List<Orders> readAll();
 
+    boolean delete(Long id);
 }

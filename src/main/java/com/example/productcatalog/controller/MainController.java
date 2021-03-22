@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -120,19 +121,21 @@ public class MainController {
             productRepo.save(product);
         return "redirect:/";
     }
-    //Фильтер
+    //Фильтр
     @PostMapping("/filter")
-    public String filter(@RequestParam (defaultValue = "") String filter,
+    public String filter(HttpServletRequest request,
+                         @RequestParam (defaultValue = "") String filter,
                          Model model) {
         Iterable<Product> product;
         if (filter != null && !filter.isEmpty()) {
-            product = productRepo.findByNameIsContaining(filter);
+            product = productRepo.filter((List<Product>) productRepo.findAll(), filter);
         } else {
             product = productRepo.findAll();
         }
         model.addAttribute("filterView", filter);
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", product);
+        model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
     }
     //Страница не найдена или нет доступа

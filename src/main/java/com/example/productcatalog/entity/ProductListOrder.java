@@ -1,5 +1,7 @@
 package com.example.productcatalog.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class ProductListOrder {
     @ManyToOne
     private Product product;
 //
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "orders_id", foreignKey = @ForeignKey(name = "FK_PLO_ORDERS"))
     private Orders orders;
