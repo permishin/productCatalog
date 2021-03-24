@@ -50,7 +50,7 @@
                         <td width="110" th:text="${i.getDescription()}"/>
                         <td>
                             <div class="dropdown ml-auto">
-                                <form th:action="${i.getId()} + '/remove'" method="post">
+                                <form method="post" th:action="'/' + ${i.getId()} + '/remove'">
                                     <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         Выбрать
                                     </button>
@@ -63,6 +63,9 @@
                             </div>
                         </td>
                     </tr>
+                </div>
+                <div th:if="${message}">
+                    <b> <div th:text="${message}"/> </b>
                 </div>
                 </tbody>
             </table>
@@ -90,7 +93,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="recipient-price" class="col-form-label">Цена:</label>
-                        <input type="text" class="form-control" id="recipient-price" name="price" placeholder="Цена">
+                        <input type="number" min="0" max="999999" step="0.5" class="form-control" id="recipient-price" name="price" placeholder="Цена">
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Описание:</label>

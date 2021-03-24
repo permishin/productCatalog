@@ -20,7 +20,7 @@
                             <input type="file" name="file" th:class="my-3">
                             <input type="text" th:value="${el.getName()}" name="name"
                                    placeholder="Товар" class="form-control"><br>
-                            <input type="text" th:value="${el.getPrice()}" name="price"
+                            <input type="number" min="0" max="999999" step="0.5"  th:value="${el.getPrice()}" name="price"
                                    placeholder="Цена" class="form-control"><br>
                             <textarea name="description" placeholder="Описание" class="form-control"
                                       th:text="${el.getDescription()}"/><br>

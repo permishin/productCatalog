@@ -1,8 +1,10 @@
 package com.example.productcatalog.controller;
 
+import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.plugin.S3Amazon;
+import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,12 +25,16 @@ import java.util.UUID;
 public class MainController {
 
     private final S3Amazon s3Amazon;
+
     private final ProductRepo productRepo;
 
+    private final ProductListOrderRepo productListOrderRepo;
 
-    public MainController(S3Amazon s3Amazon, ProductRepo productRepo) {
+
+    public MainController(S3Amazon s3Amazon, ProductRepo productRepo, ProductListOrderRepo productListOrderRepo) {
         this.s3Amazon = s3Amazon;
         this.productRepo = productRepo;
+        this.productListOrderRepo = productListOrderRepo;
     }
 
     @Value("${upload.path}")
@@ -72,18 +78,28 @@ public class MainController {
     }
     //Удаление продукта
     @PostMapping("/{id}/remove")
-    public String delete(@PathVariable(value = "id") Long id) {
+    public String delete(@PathVariable(value = "id") Long id,
+                         Model model) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        try {
-            if (!product.getFileName().equals("404.jpg")) {
-                s3Amazon.deleteFile(product.getFileName());
+        List<ProductListOrder> prodList = (List<ProductListOrder>) productListOrderRepo.findAll();
+        for (ProductListOrder p : prodList) {
+            if (p.getProduct().getName().contains(product.getName())) {
+                model.addAttribute("message", "Не надо так делать, продукт нельзя удалить пока он есть в сохраненном заказе");
+                model.addAttribute("list", productRepo.findAll());
+                model.addAttribute("uploadPath", uploadPath);
+                return "main";
             }
-        } catch (IllegalArgumentException a) {
-            a.getMessage();
         }
-        productRepo.delete(product);
-        return "redirect:/";
-    }
+                try {
+                    if (!product.getFileName().equals("404.jpg")) {
+                        s3Amazon.deleteFile(product.getFileName());
+                    }
+                } catch (IllegalArgumentException a) {
+                    a.getMessage();
+                }
+                productRepo.delete(product);
+                return "redirect:/";
+            }
     //Страница редактирование продукта
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(value = "id") Long id,
