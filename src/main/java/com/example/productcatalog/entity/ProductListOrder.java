@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
+
 @Entity
 @Table(name = "plo")
 public class ProductListOrder {
@@ -14,7 +15,7 @@ public class ProductListOrder {
 
     @ManyToOne
     private Product product;
-//
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "orders_id", foreignKey = @ForeignKey(name = "FK_PLO_ORDERS"))
@@ -27,13 +28,6 @@ public class ProductListOrder {
     private Double costFinal;
 
     public ProductListOrder() {
-    }
-
-    public ProductListOrder(Product product, Double priceFinal, Integer count, Double costFinal) {
-        this.product = product;
-        this.priceFinal = priceFinal;
-        this.count = count;
-        this.costFinal = costFinal;
     }
 
     public Long getId() {
@@ -51,6 +45,7 @@ public class ProductListOrder {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 
     public Orders getOrders() {
         return orders;

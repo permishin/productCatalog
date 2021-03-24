@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-@PreAuthorize("hasAuthority('ADMIN')")
+//@PreAuthorize("hasAuthority('ADMIN')")
 public class OrderController {
 
     private final OrderRepo orderRepo;

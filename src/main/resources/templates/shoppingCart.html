@@ -68,7 +68,7 @@
             </div>
             <form th:action="@{/makeOrder}" method="post">
                 <div class="modal-body">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                     <div class="mb-3">
                         <label for="recipient-email" class="col-form-label">Email:</label>
                         <input type="email" class="form-control" id="recipient-email" name="email" placeholder="Email" required>

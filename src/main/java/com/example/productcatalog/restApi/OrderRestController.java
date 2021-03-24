@@ -2,7 +2,6 @@ package com.example.productcatalog.restApi;
 
 
 import com.example.productcatalog.entity.Orders;
-import com.example.productcatalog.model.OrdersModel;
 import com.example.productcatalog.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/API")
+@RequestMapping("/API/orders")
 public class OrderRestController {
 
     private final OrderService orderService;
@@ -22,15 +21,26 @@ public class OrderRestController {
         this.orderService = orderService;
     }
 
-    @GetMapping(value = "/orders")
+    //Получить все заказы
+    @GetMapping
     public ResponseEntity<List<Orders>> read() {
-        final List<Orders> clients = orderService.readAll();
+        final List<Orders> orders = orderService.readAll();
 
-        return clients != null &&  !clients.isEmpty()
-                ? new ResponseEntity<>(clients, HttpStatus.OK)
+        return orders != null &&  !orders.isEmpty()
+                ? new ResponseEntity<>(orders, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //Получить заказ по ID
+    @GetMapping(value = "/{id}")
+    public ResponseEntity findById(@PathVariable(value = "id") Long Id) {
+        final Orders order = orderService.findById(Id);
+        return order != null
+                ? new ResponseEntity(order, HttpStatus.OK)
+                : new ResponseEntity(HttpStatus.NOT_FOUND);
+    }
+
+    //Удалить заказ по ID
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Long> delete(@PathVariable(name = "id") Long id) {
         final boolean deleted = orderService.delete(id);
@@ -40,4 +50,10 @@ public class OrderRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
+    //Добавить заказ
+    @PostMapping(value = "/add")
+    public ResponseEntity<?> create(@RequestBody Orders order) {
+        orderService.create(order);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
 }

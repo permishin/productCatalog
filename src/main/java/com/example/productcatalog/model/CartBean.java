@@ -84,7 +84,7 @@ public class CartBean {
         return null;
     }
 
-    public synchronized List saveSessionToProductListOrder (List<Product> product, Orders id) {
+    public synchronized List saveSessionToProductListOrder (List<Product> product, Orders order) {
         List<ProductListOrder> list = new ArrayList<>();
         ProductListOrder productListOrder = null;
         for (int i = 0; i < product.size(); i++) {
@@ -93,7 +93,7 @@ public class CartBean {
             productListOrder.setPriceFinal(product.get(i).getPrice());
             productListOrder.setCount(product.get(i).getCount());
             productListOrder.setCostFinal(product.get(i).getPrice() * product.get(i).getCount());
-            productListOrder.setOrders(id);
+            productListOrder.setOrders(order);
             list.add(productListOrder);
         }
         return list;

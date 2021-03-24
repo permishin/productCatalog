@@ -10,12 +10,13 @@ public class Orders {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
-    @Column(name = "ID", length = 50, nullable = false)
+    @Column(name = "id", length = 50, nullable = false)
     private Long id;
 
     @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductListOrder> productListOrder;
 
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     private String email;

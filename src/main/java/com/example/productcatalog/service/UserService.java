@@ -1,5 +1,6 @@
 package com.example.productcatalog.service;
 
+import com.example.productcatalog.entity.User;
 import com.example.productcatalog.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
