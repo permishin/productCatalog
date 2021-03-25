@@ -24,7 +24,7 @@ public class OrderRestController {
 
     //Получить все заказы
     @GetMapping
-    public ResponseEntity<List<Orders>> read() {
+    public ResponseEntity<List<Orders>> findAll() {
         final List<Orders> orders = orderService.readAll();
 
         return orders != null &&  !orders.isEmpty()

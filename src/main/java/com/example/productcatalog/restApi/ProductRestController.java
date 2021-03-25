@@ -21,7 +21,7 @@ public class ProductRestController {
     }
     //Получить список продуктов
     @GetMapping
-    public ResponseEntity<List<Product>> read() {
+    public ResponseEntity<List<Product>> findAll() {
         final List<Product> products = productService.readAll();
 
         return products != null &&  !products.isEmpty()
