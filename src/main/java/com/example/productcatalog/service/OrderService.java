@@ -13,4 +13,7 @@ public interface OrderService {
     Orders findById(Long id);
 
     void create(Orders order);
+
+    boolean update(Orders order, Long id);
+
 }

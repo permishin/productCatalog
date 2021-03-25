@@ -84,7 +84,7 @@ public class MainController {
         List<ProductListOrder> prodList = (List<ProductListOrder>) productListOrderRepo.findAll();
         for (ProductListOrder p : prodList) {
             if (p.getProduct().getName().contains(product.getName())) {
-                model.addAttribute("message", "Не надо так делать, продукт нельзя удалить пока он есть в сохраненном заказе");
+                model.addAttribute("message", "Не надо сюда нажимать! Продукт нельзя удалить пока он есть в сохраненном заказе =)");
                 model.addAttribute("list", productRepo.findAll());
                 model.addAttribute("uploadPath", uploadPath);
                 return "main";

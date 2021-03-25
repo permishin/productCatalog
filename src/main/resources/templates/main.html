@@ -55,7 +55,7 @@
                                         Выбрать
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a th:href="${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></li>
+                                        <li><a th:href="'/' + ${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></li>
                                         <li><button class="dropdown-item" type="submit">Удалить</button></li>
                                     </ul>
                                     <a th:href="@{|/buyProduct?id=${i.getId()}|}" class="btn btn-success">В корзину</a>

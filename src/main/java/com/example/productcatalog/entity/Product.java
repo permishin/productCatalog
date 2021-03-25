@@ -1,6 +1,8 @@
 package com.example.productcatalog.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,8 @@ public class Product {
 
     private String name, description, fileName;
     private Double price;
+
+    @JsonIgnore
     private Integer count;
 
     public Product() {

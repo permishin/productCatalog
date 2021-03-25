@@ -1,16 +1,15 @@
 package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Orders;
-import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 
 @Service
@@ -56,4 +55,22 @@ public class OrderServiceImpl implements OrderService {
             productListOrderRepo.save(p);
         }
     }
+
+    @Override
+    public boolean update(Orders order, Long id) {
+        List<Orders> ordersList = (List<Orders>) orderRepo.findAll();
+        Orders orders = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
+        for (Orders o : ordersList) {
+            if (o.getId().longValue() == id.longValue()) {
+                if (order.getAddress() != null) orders.setAddress(order.getAddress());
+                if (order.getEmail() != null) orders.setEmail(order.getEmail());
+                if (order.getProductListOrder() != null) orders.setProductListOrder(order.getProductListOrder());
+                orderRepo.save(orders);
+                return true;
+            }
+        }
+            return false;
+    }
+
+
 }

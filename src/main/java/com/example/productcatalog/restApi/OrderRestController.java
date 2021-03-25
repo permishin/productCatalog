@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -55,5 +56,15 @@ public class OrderRestController {
     public ResponseEntity<?> create(@RequestBody Orders order) {
         orderService.create(order);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+    //Обновить заказ
+    @PutMapping(value = "/update/{id}")
+    public ResponseEntity<?> update(@PathVariable(name = "id") Long id,
+                                    @RequestBody Orders order) {
+        final boolean updated = orderService.update(order, id);
+
+        return updated
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }
