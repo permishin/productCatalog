@@ -20,11 +20,11 @@ public class S3Amazon {
 
     @Value("${s3.amazon.bucket}")
     private String bucket;
-
+    //Соединение с сервером Амазон
     public AmazonS3 initConnect() {
         AWSCredentials credentials = new BasicAWSCredentials(
-                "AKIASIHKZM3FAJZWG473",
-                "E29AcfUVoiFqYxy8OTSJ/14Bb+mYVht9nEovpayM"
+                "AKIASIHKZM3FLKUNFBPS",
+                "lprN0MhhI+sAdSUuzokxp/cZ0ITdo+TARWWHgRXV"
         );
         AmazonS3 s3client = AmazonS3ClientBuilder
                 .standard()
@@ -33,7 +33,7 @@ public class S3Amazon {
                 .build();
         return s3client;
     }
-
+    //Загрузка фото на сервер
     public void uploadFile(String resultFileName, MultipartFile file) {
         File fileObj = convert(file);
         initConnect().putObject(new PutObjectRequest(bucket, resultFileName, fileObj)
@@ -49,7 +49,7 @@ public class S3Amazon {
        }
         return convFile;
     }
-
+    //Удаление фото на сервер
     public void deleteFile(String fileName) {
         initConnect().deleteObject(bucket, fileName);
     }

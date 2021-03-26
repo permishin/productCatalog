@@ -9,7 +9,7 @@ import java.util.Locale;
 
 
 public interface ProductRepo extends CrudRepository<Product, Long> {
-
+    // Фильтр для продуктов
     default List<Product> filter(List<Product> product, String filter) {
         List<Product> result = new ArrayList<>();
         for (Product p : product) {
