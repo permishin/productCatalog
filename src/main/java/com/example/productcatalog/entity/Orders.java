@@ -26,7 +26,17 @@ public class Orders {
 
     private String address;
 
+    private String comment;
+
     public Orders() {
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public String getEmail() {

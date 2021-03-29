@@ -3,9 +3,9 @@ package com.example.productcatalog.controller;
 import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Product;
-import com.example.productcatalog.plugin.S3Amazon;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
+import com.example.productcatalog.service.ControllerService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,26 +19,27 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Controller
 public class MainController {
-
-    private final S3Amazon s3Amazon;
 
     private final ProductRepo productRepo;
 
     private final ProductListOrderRepo productListOrderRepo;
 
+    private final ControllerService controllerService;
 
-    public MainController(S3Amazon s3Amazon, ProductRepo productRepo, ProductListOrderRepo productListOrderRepo) {
-        this.s3Amazon = s3Amazon;
+
+    public MainController(ProductRepo productRepo, ProductListOrderRepo productListOrderRepo, ControllerService controllerService) {
         this.productRepo = productRepo;
         this.productListOrderRepo = productListOrderRepo;
+        this.controllerService = controllerService;
     }
 
     @Value("${upload.path}")
     private String uploadPath;
+
     //Гет страницы продуктов
     @GetMapping("/")
     public String main(HttpServletRequest request,
@@ -51,6 +52,7 @@ public class MainController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
     }
+
     //Добавление нового продукта
     @PostMapping("/")
     public String add(
@@ -59,23 +61,14 @@ public class MainController {
             @RequestParam (defaultValue = "0")Double price,
             @RequestParam("file") MultipartFile file,
             Model model) {
-        Product product = new Product(name, description, price);
-
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
-            product.setFileName(resultFileName);
-            s3Amazon.uploadFile(resultFileName, file);
-        } else {
-            product.setFileName("404.jpg");
-        }
-        product.setCount(1);
-        productRepo.save(product);
+        Product product = new Product();
+            controllerService.saveProduct(product, name, description, price,file);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
         return "main";
     }
+
     //Удаление продукта
     @PostMapping("/{id}/remove")
     public String delete(@PathVariable(value = "id") Long id,
@@ -90,16 +83,10 @@ public class MainController {
                 return "main";
             }
         }
-                try {
-                    if (!product.getFileName().equals("404.jpg")) {
-                        s3Amazon.deleteFile(product.getFileName());
-                    }
-                } catch (IllegalArgumentException a) {
-                    a.getMessage();
-                }
-                productRepo.delete(product);
+        controllerService.deleteProduct(id);
                 return "redirect:/";
             }
+
     //Страница редактирование продукта
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(value = "id") Long id,
@@ -115,6 +102,7 @@ public class MainController {
         model.addAttribute("title", "Редактировать продукт");
         return "edit";
     }
+
     //Пост редактирования продукта
     @PostMapping("/{id}/edit")
     public String PostEdit(@PathVariable(value = "id") Long id,
@@ -122,25 +110,14 @@ public class MainController {
                            @RequestParam String description,
                            @RequestParam Double price,
                            @RequestParam("file") MultipartFile file) {
-        Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            s3Amazon.uploadFile(resultFileName, file);
-            if (!product.getFileName().equals("404.jpg")) {
-                s3Amazon.deleteFile(product.getFileName());
-            }
-            product.setFileName(resultFileName);
-        }
-            product.setName(name);
-            product.setDescription(description);
-            product.setPrice(price);
-            productRepo.save(product);
+        controllerService.editProduct(id, name, description, price, file);
         return "redirect:/";
     }
+
     //Фильтр
-    @PostMapping("/filter")
+    @GetMapping("/main")
     public String filter(HttpServletRequest request,
-                         @RequestParam (defaultValue = "") String filter,
+                         @RequestParam (required = false, defaultValue = "") String filter,
                          Model model) {
         Iterable<Product> product;
         if (filter != null && !filter.isEmpty()) {
@@ -154,6 +131,7 @@ public class MainController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
     }
+
     //Страница не найдена или нет доступа
     @GetMapping("/403")
     public String accessDenied(Model model) {

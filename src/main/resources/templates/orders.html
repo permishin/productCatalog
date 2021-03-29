@@ -11,15 +11,17 @@
 <div class="container">
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
+            <div th:each="i : ${orders}">
+            <div class="card">
+                <div class="card-body">
             <table class="table">
-                <div th:each="i : ${orders}">
                 <thead>
                 <tr>
                     <th scope="col" width="30">Заказ №</th>
                     <th scope="col" width="30">Дата</th>
                     <th scope="col" width="30">Состав</th>
-                    <th scope="col" width="30">К оплате</th>
                     <th scope="col" width="30">Edit</th>
+                    <th scope="col" width="30">Удалить</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -51,13 +53,20 @@
                                     </tbody>
                                 </table>
                             </td>
-                            <td><a th:href="'/orders/' + ${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></td>
+                            <td><a th:href="'/orders/' + ${i.getId()} + '/edit'" class="dropdown-item">Edit</a></td>
                         <td><button class="dropdown-item" type="submit">Удалить</button></td>
                         </tr>
                     </form>
                 </tbody>
-                </div>
             </table>
+                    <b><h6>Mail:</h6></b> <p th:text="${i.getEmail()}"/>
+                    <b><h6>Адрес доставки:</h6></b> <p th:text="${i.getAddress()}"/>
+                    <b><h6>Комментарий:</h6></b> <p th:text="${i.getComment()}"/>
+                </div>
+            </div>
+                <br>
+            </div>
+
         </div>
     </div>
 </div>

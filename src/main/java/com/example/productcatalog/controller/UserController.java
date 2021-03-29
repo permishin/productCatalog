@@ -1,19 +1,17 @@
 package com.example.productcatalog.controller;
 
-import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.entity.Role;
 import com.example.productcatalog.entity.User;
+import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.repo.UserRepo;
-import org.springframework.security.access.prepost.PreAuthorize;
+import com.example.productcatalog.service.ControllerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -21,9 +19,14 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserRepo userRepo;
-    public UserController(UserRepo userRepo) {
+
+    private final ControllerService controllerService;
+
+    public UserController(UserRepo userRepo, ControllerService controllerService) {
         this.userRepo = userRepo;
+        this.controllerService = controllerService;
     }
+
     //Геттер страница пользователей
     @GetMapping
     public String userList(HttpServletRequest request,
@@ -50,20 +53,7 @@ public class UserController {
             @RequestParam Map<String, String> form,
             @RequestParam("userId") User user,
             @RequestParam String password) {
-
-        user.setUsername(username);
-        user.setPassword(password);
-        user.getRoles().clear();
-
-        Set<String> roles = Arrays.stream(Role.values())
-                .map(Role::name)
-                .collect(Collectors.toSet());
-        for (String key : form.keySet()) {
-            if(roles.contains(key)) {
-                user.getRoles().add(Role.valueOf(key));
-            }
-        }
-        userRepo.save(user);
+        controllerService.editUser(username, form, user, password);
         return "redirect:/user";
     }
     //Удаление пользователя
@@ -83,7 +73,7 @@ public class UserController {
             model.put("users", userRepo.findAll());
             return "userList";
         }
-        if (username == null || username == "" || username.contains(" ")) {
+        if (username == null || username.equals("") || username.contains(" ")) {
             model.put("message", "Поле Логин не может быть пустым и содержать пробелы");
             model.put("users", userRepo.findAll());
             return "userList";

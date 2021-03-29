@@ -50,9 +50,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .exceptionHandling()
                     .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                    .httpBasic()
-                .and()
-                    .sessionManagement().disable();
+                    .httpBasic();
+//                .and()
+//                    .sessionManagement().disable();
     }
 
     @Override

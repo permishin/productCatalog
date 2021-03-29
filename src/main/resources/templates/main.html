@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"/>
 <head>
     <header th:insert="block/header :: header"/>
 </head>
@@ -10,12 +10,12 @@
 <div class="container">
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
-            <form method="post" action="/filter">
+            <form method="get" action="/main" class="form-inline">
 <!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                 <div class="row g-3 align-items-center">
                     <div class="col-auto">
                         <form class="d-flex">
-                            <input type="search" class="form-control me-2" placeholder="Фильтр" th:value="${filterView}" name="filter">
+                            <input type="search" class="form-control me-2" placeholder="Фильтр" th:value="${filterView}" name="filter"/>
                         </form>
                     </div>
                     <div class="col-auto">
@@ -27,28 +27,24 @@
         </div>
     </div>
 </div>
-<br>
+<br/>
 <div class="container">
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col" width="30">Фото</th>
-                    <th scope="col" width="50">Товар</th>
-                    <th scope="col" width="50">Цена</th>
-                    <th scope="col" width="110">Описание</th>
-                    <th scope="col" width="170">Действие</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div th:if="${message}">
+                <b> <div th:text="${message}"/> </b>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="product-list-test">
                 <div th:each="i : ${list}">
-                    <tr>
-                        <td width="30" th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" class="rounded float-start" width="150" height="150"></td>
-                        <td width="50" th:text="${i.getName()}"/>
-                        <td width="50" th:text="${i.getPrice()}"/>
-                        <td width="110" th:text="${i.getDescription()}"/>
-                        <td>
+                <div class="col">
+                    <div class="card h-100" th:attr="data-id=${i.getId()}">
+                        <div th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" class="card-img-top"/></div>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${i.getName()}"/>
+                            <p class="card-text" th:text="${i.getDescription()}"/>
+                            <p class="card-text" th:text="${i.getPrice()}"/>
+                        </div>
+                        <div class="card-footer">
                             <div class="dropdown ml-auto">
                                 <form method="post" th:action="'/' + ${i.getId()} + '/remove'">
                                     <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -61,18 +57,15 @@
                                     <a th:href="@{|/buyProduct?id=${i.getId()}|}" class="btn btn-success">В корзину</a>
                                 </form>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 </div>
-                <div th:if="${message}">
-                    <b> <div th:text="${message}"/> </b>
                 </div>
-                </tbody>
-            </table>
+</div>
         </div>
     </div>
 </div>
-<br>
+<br/>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -84,16 +77,16 @@
                 <div class="modal-body">
 <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                     <div class="mb-3">
-                        <label for="formFile" class="form-label">Фото:</label><br>
-                        <input class="form-control" type="file" name="file" id="formFile" th:class="my-3">
+                        <label for="formFile" class="form-label">Фото:</label><br/>
+                        <input class="form-control" type="file" name="file" id="formFile" th:class="my-3"/>
                     </div>
                     <div class="mb-3">
                         <label for="recipient-name" class="col-form-label">Наименование:</label>
-                        <input type="text" class="form-control" id="recipient-name" name="name" placeholder="Наименование">
+                        <input type="text" class="form-control" id="recipient-name" name="name" placeholder="Наименование"/>
                     </div>
                     <div class="mb-3">
                         <label for="recipient-price" class="col-form-label">Цена:</label>
-                        <input type="number" min="0" max="999999" step="0.5" class="form-control" id="recipient-price" name="price" placeholder="Цена">
+                        <input type="number" min="0" max="999999" step="0.5" class="form-control" id="recipient-price" name="price" placeholder="Цена"/>
                     </div>
                     <div class="mb-3">
                         <label for="message-text" class="col-form-label">Описание:</label>
