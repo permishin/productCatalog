@@ -3,7 +3,6 @@ package com.example.productcatalog.model;
 import com.example.productcatalog.entity.Orders;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.entity.ProductListOrder;
-import com.example.productcatalog.repo.ProductListOrderRepo;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;

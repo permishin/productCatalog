@@ -20,11 +20,12 @@ public class S3Amazon {
 
     @Value("${s3.amazon.bucket}")
     private String bucket;
+
     //Соединение с сервером Амазон
     public AmazonS3 initConnect() {
         AWSCredentials credentials = new BasicAWSCredentials(
-                "AKIASIHKZM3FLKUNFBPS",
-                "lprN0MhhI+sAdSUuzokxp/cZ0ITdo+TARWWHgRXV"
+                "AKIASIHKZM3FEOULIIXW",
+                "14vveAG5uqvN662ouzR/5diY+r2IozyP+3epa/Nr"
         );
         AmazonS3 s3client = AmazonS3ClientBuilder
                 .standard()

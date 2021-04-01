@@ -2,13 +2,16 @@ package com.example.productcatalog.restApi;
 
 
 import com.example.productcatalog.entity.Orders;
+import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.service.OrderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -16,10 +19,12 @@ import java.util.List;
 public class OrderRestController {
 
     private final OrderService orderService;
+    private final OrderRepo orderRepo;
 
     @Autowired
-    public OrderRestController(OrderService orderService) {
+    public OrderRestController(OrderService orderService, OrderRepo orderRepo) {
         this.orderService = orderService;
+        this.orderRepo = orderRepo;
     }
 
     //Получить все заказы
@@ -67,4 +72,11 @@ public class OrderRestController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-}
+    @GetMapping(value = "/xml",
+                produces = "application/xml"
+    )
+    public Orders jacksonXml() {
+            return new Orders();
+        }
+    }
+
