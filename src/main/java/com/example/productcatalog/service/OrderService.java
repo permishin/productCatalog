@@ -1,7 +1,6 @@
 package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Orders;
-
 import java.util.List;
 
 public interface OrderService {
@@ -15,5 +14,4 @@ public interface OrderService {
     void create(Orders order);
 
     boolean update(Orders order, Long id);
-
 }

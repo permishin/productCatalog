@@ -102,8 +102,8 @@ public class ShoppingController {
         } else {
             Orders orders = new Orders();
             controllerService.saveOrder(orders, email, address, comment, bean);
-            }
-            bean.deleteAll(bean);
-            return "redirect:/orders";
         }
+        bean.deleteAll(bean);
+        return "redirect:/orders";
+    }
 }

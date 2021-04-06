@@ -14,7 +14,7 @@ public class CartBean {
     public CartBean() {
     }
 
-    private ArrayList<Product> prod = new ArrayList<Product>();
+    private final List<Product> prod = new ArrayList<>();
 
     public synchronized void addItemProduct(Product product) {
         prod.add(product);
@@ -29,19 +29,19 @@ public class CartBean {
     }
     public synchronized Integer quantity() {
         int count = 0;
-        for(int i = 0; i < prod.size(); i ++) {
-            count += prod.get(i).getCount();
+        for (Product product : prod) {
+            count += product.getCount();
         }
         return count;
     }
     public synchronized Double totalCost() {
-        Double cost = 0.0;
+        double cost = 0.0;
         for(Product p : prod) {
             cost += p.getPrice() * p.getCount();
         }
         return cost;
     }
-    public synchronized ArrayList<Product> getProd() {
+    public synchronized List<Product> getProd() {
         return new ArrayList<Product>(prod);
     }
     public static CartBean get(HttpSession session) {
@@ -83,15 +83,15 @@ public class CartBean {
         return null;
     }
 
-    public synchronized List saveSessionToProductListOrder (List<Product> product, Orders order) {
+    public synchronized List<ProductListOrder> saveSessionToProductListOrder (List<Product> product, Orders order) {
         List<ProductListOrder> list = new ArrayList<>();
-        ProductListOrder productListOrder = null;
-        for (int i = 0; i < product.size(); i++) {
+        ProductListOrder productListOrder;
+        for (Product value : product) {
             productListOrder = new ProductListOrder();
-            productListOrder.setProduct(product.get(i));
-            productListOrder.setPriceFinal(product.get(i).getPrice());
-            productListOrder.setCount(product.get(i).getCount());
-            productListOrder.setCostFinal(product.get(i).getPrice() * product.get(i).getCount());
+            productListOrder.setProduct(value);
+            productListOrder.setPriceFinal(value.getPrice());
+            productListOrder.setCount(value.getCount());
+            productListOrder.setCostFinal(value.getPrice() * value.getCount());
             productListOrder.setOrders(order);
             list.add(productListOrder);
         }

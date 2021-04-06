@@ -18,8 +18,8 @@
             </span>
 
             </form>
-            <span sec:authorize="isAuthenticated()">| Привет <span id="loginControl" sec:authentication="name"></span> |
-                Роли: <span sec:authentication="principal.authorities"></span> |
+            <span sec:authorize="isAuthenticated()"> Привет <a href="/user/userInfo"><span id="loginControl" sec:authentication="name"></span></a>
+<!--                Роли: <span sec:authentication="principal.authorities"></span> |-->
             </span>
         </nav>
     </div>

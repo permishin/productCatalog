@@ -5,12 +5,8 @@ import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import org.springframework.stereotype.Service;
-
-
 import java.util.Date;
 import java.util.List;
-
-
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -69,8 +65,6 @@ public class OrderServiceImpl implements OrderService {
                 return true;
             }
         }
-            return false;
+        return false;
     }
-
-
 }

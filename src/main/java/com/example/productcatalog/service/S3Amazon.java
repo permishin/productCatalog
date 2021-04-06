@@ -1,4 +1,4 @@
-package com.example.productcatalog.plugin;
+package com.example.productcatalog.service;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
@@ -24,8 +24,8 @@ public class S3Amazon {
     //Соединение с сервером Амазон
     public AmazonS3 initConnect() {
         AWSCredentials credentials = new BasicAWSCredentials(
-                "AKIASIHKZM3FEOULIIXW",
-                "14vveAG5uqvN662ouzR/5diY+r2IozyP+3epa/Nr"
+                System.getenv("ACCESS_KEY"),
+                System.getenv("SECRET_KEY")
         );
         AmazonS3 s3client = AmazonS3ClientBuilder
                 .standard()
@@ -44,15 +44,14 @@ public class S3Amazon {
     public File convert(MultipartFile file)
     {
         File convFile = new File(file.getOriginalFilename());
-       try ( FileOutputStream fos = new FileOutputStream(convFile)) {
-           fos.write(file.getBytes());
-       } catch (IOException e){
-       }
+        try ( FileOutputStream fos = new FileOutputStream(convFile)) {
+            fos.write(file.getBytes());
+        } catch (IOException e){
+        }
         return convFile;
     }
     //Удаление фото на сервер
     public void deleteFile(String fileName) {
         initConnect().deleteObject(bucket, fileName);
     }
-
 }

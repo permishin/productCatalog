@@ -37,22 +37,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/registration", "/static/**", "swagger-ui").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers("/registration", "/static/**", "swagger-ui").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
                 .and()
-                    .logout()
-                    .permitAll()
+                .logout()
+                .permitAll()
                 .and()
-                    .exceptionHandling()
-                    .accessDeniedHandler(accessDeniedHandler())
+                .exceptionHandling()
+                .accessDeniedHandler(accessDeniedHandler())
                 .and()
-                    .httpBasic();
-//                .and()
-//                    .sessionManagement().disable();
+                .httpBasic();
     }
 
     @Override

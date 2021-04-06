@@ -15,10 +15,10 @@ public class ProductRestController {
 
     private final ProductService productService;
 
-
     public ProductRestController(ProductService productService) {
         this.productService = productService;
     }
+
     //Получить список продуктов
     @GetMapping
     public ResponseEntity<List<Product>> findAll() {
@@ -46,13 +46,13 @@ public class ProductRestController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
     //Добавить продукт
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/")
     public ResponseEntity<?> create(@RequestBody Product product) {
         productService.create(product);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     //Обновить продукт
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id,
                                     @RequestBody Product product) {
         final boolean updated = productService.update(product, id);

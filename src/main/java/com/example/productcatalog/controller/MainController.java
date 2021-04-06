@@ -61,7 +61,7 @@ public class MainController {
             @RequestParam("file") MultipartFile file,
             Model model) {
         Product product = new Product();
-            controllerService.saveProduct(product, name, description, price,file);
+        controllerService.saveProduct(product, name, description, price,file);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("uploadPath", uploadPath);
         model.addAttribute("list", list);
@@ -83,8 +83,8 @@ public class MainController {
             }
         }
         controllerService.deleteProduct(id);
-                return "redirect:/";
-            }
+        return "redirect:/";
+    }
 
     //Страница редактирование продукта
     @GetMapping("/{id}/edit")
@@ -94,7 +94,7 @@ public class MainController {
             return "redirect:/";
         }
         Optional<Product> user = productRepo.findById(id);
-        ArrayList<Product> list = new ArrayList<>();
+        List<Product> list = new ArrayList<>();
         user.ifPresent(list::add);
         model.addAttribute("user", list);
         model.addAttribute("uploadPath", uploadPath);

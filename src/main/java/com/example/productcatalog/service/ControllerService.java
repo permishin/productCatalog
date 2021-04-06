@@ -2,8 +2,6 @@ package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.*;
 import com.example.productcatalog.model.CartBean;
-import com.example.productcatalog.model.OrderMethod;
-import com.example.productcatalog.plugin.S3Amazon;
 import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
@@ -56,7 +54,7 @@ public class ControllerService {
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             String uuidFile = UUID.randomUUID().toString();
             String resultFileName = uuidFile + "." + file.getOriginalFilename();
             product.setFileName(resultFileName);
@@ -86,7 +84,7 @@ public class ControllerService {
     public void editProduct(Long id, String name, String description, Double price, MultipartFile file) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
+        if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
             s3Amazon.uploadFile(resultFileName, file);
             if (!product.getFileName().equals("404.jpg")) {
                 s3Amazon.deleteFile(product.getFileName());
@@ -120,7 +118,7 @@ public class ControllerService {
     public void addProductToOrder(Long id, Long idProduct) {
         Orders order = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
         Product product = productRepo.findById(idProduct).orElseThrow(IllegalStateException::new);
-        order.setProductListOrder(OrderMethod.addProductToOrders(product,order));
+        order.setProductListOrder(addProductToOrders(product,order));
         orderRepo.save(order);
     }
 
@@ -128,7 +126,7 @@ public class ControllerService {
     public void deleteProductFromOrder(Long id, Long idProduct) {
         Orders order = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
         Product product = productRepo.findById(idProduct).orElseThrow(IllegalStateException::new);
-        order.setProductListOrder(OrderMethod.DeleteProductFromOrders(product,order));
+        order.setProductListOrder(DeleteProductFromOrders(product,order));
         if (order.getProductListOrder().isEmpty()) {
             orderRepo.delete(order);
         } else {
@@ -142,5 +140,42 @@ public class ControllerService {
         product.setCount(count);
         product.setCostFinal(product.getPriceFinal() * product.getCount());
         productListOrderRepo.save(product);
+    }
+
+    public static List<ProductListOrder> addProductToOrders(Product product, Orders order) {
+        boolean isNew = false;
+        List<ProductListOrder> productList = order.getProductListOrder();
+        for(ProductListOrder s : productList) {
+            if (s.getProduct().getId().equals(product.getId())) {
+                s.setCount(s.getCount() + 1);
+                s.setCostFinal(s.getCount() * s.getPriceFinal());
+                isNew = false;
+                break;
+            } else {
+                isNew = true;
+            }
+        }
+        if (isNew) {
+            ProductListOrder productListOrder = new ProductListOrder();
+            productListOrder.setProduct(product);
+            productListOrder.setPriceFinal(product.getPrice());
+            productListOrder.setCount(product.getCount());
+            productListOrder.setCostFinal(product.getPrice() * product.getCount());
+            productListOrder.setOrders(order);
+            productList.add(productListOrder);
+            return productList;
+        }
+        return productList;
+    }
+
+    //Удалить продукт из заказа
+    public static List<ProductListOrder> DeleteProductFromOrders(Product product, Orders order) {
+        List<ProductListOrder> productList = order.getProductListOrder();
+        for (int i = 0; i < productList.size(); i ++) {
+            if (productList.get(i).getProduct().getId().equals(product.getId())) {
+                productList.remove(productList.get(i));
+            }
+        }
+        return productList;
     }
 }

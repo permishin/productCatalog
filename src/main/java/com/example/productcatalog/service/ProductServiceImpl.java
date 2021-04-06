@@ -3,9 +3,8 @@ package com.example.productcatalog.service;
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repo.ProductRepo;
 import org.springframework.stereotype.Service;
-
-
 import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 

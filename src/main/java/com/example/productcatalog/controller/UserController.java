@@ -83,5 +83,10 @@ public class UserController {
         userRepo.save(user);
         return "redirect:/user";
     }
-
+    //Геттер информации о пользователе
+        @GetMapping("/userInfo")
+        public String userInfo(Model model) {
+        
+        return "userInfo";
+        }
 }

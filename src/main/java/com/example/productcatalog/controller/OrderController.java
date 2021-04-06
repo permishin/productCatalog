@@ -2,11 +2,8 @@ package com.example.productcatalog.controller;
 
 import com.example.productcatalog.entity.Orders;
 import com.example.productcatalog.entity.Product;
-import com.example.productcatalog.entity.ProductListOrder;
 import com.example.productcatalog.model.CartBean;
-import com.example.productcatalog.model.OrderMethod;
 import com.example.productcatalog.repo.OrderRepo;
-import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
 import com.example.productcatalog.service.ControllerService;
 import org.springframework.beans.factory.annotation.Value;
@@ -81,7 +78,7 @@ public class OrderController {
     //Удалить продукт из заказа
     @GetMapping("/orders/{id}/deleteProduct/{idProduct}")
     public String deleteProductFromOrder(@PathVariable(value = "id") Long id,
-                                       @PathVariable (value = "idProduct") Long idProduct) {
+                                         @PathVariable (value = "idProduct") Long idProduct) {
         controllerService.deleteProductFromOrder(id, idProduct);
         return "redirect:/orders/{id}/edit";
     }

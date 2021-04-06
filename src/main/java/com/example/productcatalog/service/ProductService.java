@@ -1,7 +1,6 @@
 package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Product;
-
 import java.util.List;
 
 public interface ProductService {

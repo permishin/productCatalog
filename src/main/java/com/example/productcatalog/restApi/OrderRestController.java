@@ -4,14 +4,10 @@ package com.example.productcatalog.restApi;
 import com.example.productcatalog.entity.Orders;
 import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.service.OrderService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,12 +15,10 @@ import java.util.List;
 public class OrderRestController {
 
     private final OrderService orderService;
-    private final OrderRepo orderRepo;
 
     @Autowired
-    public OrderRestController(OrderService orderService, OrderRepo orderRepo) {
+    public OrderRestController(OrderService orderService) {
         this.orderService = orderService;
-        this.orderRepo = orderRepo;
     }
 
     //Получить все заказы
@@ -57,13 +51,13 @@ public class OrderRestController {
     }
 
     //Добавить заказ
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/")
     public ResponseEntity<?> create(@RequestBody Orders order) {
         orderService.create(order);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
     //Обновить заказ
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id,
                                     @RequestBody Orders order) {
         final boolean updated = orderService.update(order, id);
@@ -72,11 +66,5 @@ public class OrderRestController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
-    @GetMapping(value = "/xml",
-                produces = "application/xml"
-    )
-    public Orders jacksonXml() {
-            return new Orders();
-        }
-    }
+}
 
