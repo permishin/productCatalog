@@ -28,7 +28,18 @@ public class Orders {
 
     private String comment;
 
+    @Column(name = "orderprice")
+    private Double orderPrice;
+
     public Orders() {
+    }
+
+    public Double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(Double orderPrice) {
+        this.orderPrice = orderPrice;
     }
 
     public String getComment() {

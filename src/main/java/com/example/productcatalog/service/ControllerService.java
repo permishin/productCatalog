@@ -36,8 +36,9 @@ public class ControllerService {
         this.productListOrderRepo = productListOrderRepo;
     }
 
-    //Метод сохранения нового заказа
+    //Метод создания нового заказа
     public void saveOrder(Orders orders,String email, String address, String comment, CartBean bean) {
+        double orderPrice = 0.0;
         orders.setDate(new Date());
         orders.setEmail(email);
         orders.setAddress(address);
@@ -46,7 +47,10 @@ public class ControllerService {
         List<ProductListOrder> list = bean.saveSessionToProductListOrder(bean.getProd(), orders);
         for (ProductListOrder productListOrder : list) {
             plo.save(productListOrder);
+            orderPrice += productListOrder.getPriceFinal() * productListOrder.getCount();
         }
+        orders.setOrderPrice(orderPrice);
+        orderRepo.save(orders);
     }
 
     //Метод сохранения нового продукта
@@ -119,6 +123,7 @@ public class ControllerService {
         Orders order = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
         Product product = productRepo.findById(idProduct).orElseThrow(IllegalStateException::new);
         order.setProductListOrder(addProductToOrders(product,order));
+        order.setOrderPrice(order.getOrderPrice() + product.getPrice());
         orderRepo.save(order);
     }
 
@@ -130,6 +135,10 @@ public class ControllerService {
         if (order.getProductListOrder().isEmpty()) {
             orderRepo.delete(order);
         } else {
+            order.setOrderPrice(0.0);
+            for (ProductListOrder p : productListOrderRepo.findAll()){
+              order.setOrderPrice(order.getOrderPrice() - (p.getPriceFinal() * p.getCount()));
+            }
             orderRepo.save(order);
         }
     }

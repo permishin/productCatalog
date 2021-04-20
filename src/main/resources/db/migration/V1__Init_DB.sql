@@ -6,6 +6,7 @@ create table orders (
     date timestamp,
     email varchar(255),
     comment varchar(255),
+    orderPrice float8,
     primary key (id)
 );
 
