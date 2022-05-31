@@ -19,7 +19,9 @@ public class ControllerService {
 
     private final ProductListOrderRepo plo;
 
-    private final S3Amazon s3Amazon;
+    private final FileService fileService;
+
+//    private final S3Amazon s3Amazon;
 
     private final ProductRepo productRepo;
 
@@ -27,10 +29,11 @@ public class ControllerService {
 
     private final ProductListOrderRepo productListOrderRepo;
 
-    public ControllerService(OrderRepo orderRepo, ProductListOrderRepo plo, S3Amazon s3Amazon, ProductRepo productRepo, UserRepo userRepo, ProductListOrderRepo productListOrderRepo) {
+    public ControllerService(OrderRepo orderRepo, ProductListOrderRepo plo, FileService fileService, ProductRepo productRepo, UserRepo userRepo, ProductListOrderRepo productListOrderRepo) {
         this.orderRepo = orderRepo;
         this.plo = plo;
-        this.s3Amazon = s3Amazon;
+        this.fileService = fileService;
+//        this.s3Amazon = s3Amazon;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
         this.productListOrderRepo = productListOrderRepo;
@@ -59,10 +62,10 @@ public class ControllerService {
         product.setDescription(description);
         product.setPrice(price);
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFileName = uuidFile + "." + file.getOriginalFilename();
+            fileService.uploadFile(file);
+            String resultFileName = fileService.renameFile(file, file.getOriginalFilename());
             product.setFileName(resultFileName);
-            s3Amazon.uploadFile(resultFileName, file);
+//            s3Amazon.uploadFile(resultFileName, file);
         } else {
             product.setFileName("404.jpg");
         }
@@ -76,7 +79,7 @@ public class ControllerService {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         try {
             if (!product.getFileName().equals("404.jpg")) {
-                s3Amazon.deleteFile(product.getFileName());
+//                s3Amazon.deleteFile(product.getFileName());
             }
         } catch (IllegalArgumentException a) {
             a.getMessage();
@@ -87,11 +90,13 @@ public class ControllerService {
     //Редактирование продукта
     public void editProduct(Long id, String name, String description, Double price, MultipartFile file) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        String resultFileName = UUID.randomUUID().toString() + "." + file.getOriginalFilename();
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            s3Amazon.uploadFile(resultFileName, file);
+//            s3Amazon.uploadFile(resultFileName, file);
+            fileService.uploadFile(file);
+            String resultFileName = fileService.renameFile(file, file.getOriginalFilename());
+            product.setFileName(resultFileName);
             if (!product.getFileName().equals("404.jpg")) {
-                s3Amazon.deleteFile(product.getFileName());
+//                s3Amazon.deleteFile(product.getFileName());
             }
             product.setFileName(resultFileName);
         }

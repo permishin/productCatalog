@@ -36,8 +36,8 @@ public class MainController {
         this.controllerService = controllerService;
     }
 
-    @Value("${upload.path}")
-    private String uploadPath;
+    @Value("${file.Dir}")
+    private String fileDir;
 
     //Гет страницы продуктов
     @GetMapping("/")
@@ -46,7 +46,7 @@ public class MainController {
 
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("title", "Каталог товаров");
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("list", list);
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";
@@ -63,27 +63,9 @@ public class MainController {
         Product product = new Product();
         controllerService.saveProduct(product, name, description, price,file);
         Iterable<Product> list = productRepo.findAll();
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("list", list);
         return "main";
-    }
-
-    //Удаление продукта
-    @PostMapping("/{id}/remove")
-    public String delete(@PathVariable(value = "id") Long id,
-                         Model model) {
-        Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
-        List<ProductListOrder> prodList = (List<ProductListOrder>) productListOrderRepo.findAll();
-        for (ProductListOrder p : prodList) {
-            if (p.getProduct().getName().contains(product.getName())) {
-                model.addAttribute("message", "Не надо сюда нажимать! Продукт нельзя удалить пока он есть в сохраненном заказе =)");
-                model.addAttribute("list", productRepo.findAll());
-                model.addAttribute("uploadPath", uploadPath);
-                return "main";
-            }
-        }
-        controllerService.deleteProduct(id);
-        return "redirect:/";
     }
 
     //Страница редактирование продукта
@@ -97,7 +79,7 @@ public class MainController {
         List<Product> list = new ArrayList<>();
         user.ifPresent(list::add);
         model.addAttribute("user", list);
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("title", "Редактировать продукт");
         return "edit";
     }
@@ -113,6 +95,24 @@ public class MainController {
         return "redirect:/";
     }
 
+    //Удаление продукта
+    @PostMapping("/{id}/remove")
+    public String delete(@PathVariable(value = "id") Long id,
+                         Model model) {
+        Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
+        List<ProductListOrder> prodList = (List<ProductListOrder>) productListOrderRepo.findAll();
+        for (ProductListOrder p : prodList) {
+            if (p.getProduct().getName().contains(product.getName())) {
+                model.addAttribute("message", "Не надо сюда нажимать! Продукт нельзя удалить пока он есть в сохраненном заказе =)");
+                model.addAttribute("list", productRepo.findAll());
+                model.addAttribute("uploadPath", fileDir);
+                return "main";
+            }
+        }
+        controllerService.deleteProduct(id);
+        return "redirect:/";
+    }
+
     //Фильтр
     @GetMapping("/main")
     public String filter(HttpServletRequest request,
@@ -125,7 +125,7 @@ public class MainController {
             product = productRepo.findAll();
         }
         model.addAttribute("filterView", filter);
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("list", product);
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "main";

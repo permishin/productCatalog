@@ -2,6 +2,7 @@ package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.Product;
 import com.example.productcatalog.repo.ProductRepo;
+import com.example.productcatalog.service.ProductService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

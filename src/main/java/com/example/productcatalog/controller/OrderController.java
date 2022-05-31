@@ -32,8 +32,8 @@ public class OrderController {
         this.controllerService = controllerService;
     }
 
-    @Value("${upload.path}")
-    private String uploadPath;
+    @Value("${file.Dir}")
+    private String fileDir;
 
     // Гет страницы orders
     @GetMapping("/orders")
@@ -41,7 +41,7 @@ public class OrderController {
                          Model model) {
         Iterable<Orders> list = orderRepo.findAll();
         model.addAttribute("orders", list);
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "orders";
     }
@@ -63,7 +63,7 @@ public class OrderController {
         }
         Orders order = orderRepo.findById(id).orElseThrow(IllegalStateException::new);
         Iterable<Product> productList = productRepo.findAll();
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("orderEdit", order);
         model.addAttribute("productList", productList);
         return "orderEdit";

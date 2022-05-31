@@ -20,8 +20,8 @@ public class ShoppingController {
 
     private final ControllerService controllerService;
 
-    @Value("${upload.path}")
-    private String uploadPath;
+    @Value("${file.Dir}")
+    private String fileDir;
 
     public ShoppingController(ProductRepo prodRepo, ControllerService controllerService) {
         this.prodRepo = prodRepo;
@@ -55,7 +55,7 @@ public class ShoppingController {
         if (bean.getProd().isEmpty()) {
             model.addAttribute("message", "Корзина пуста! Для создания заказа, пожалуйста, добавьте товары.");
         }
-        model.addAttribute("uploadPath", uploadPath);
+        model.addAttribute("uploadPath", fileDir);
         model.addAttribute("cartForm", bean);
         model.addAttribute("totalCost", bean.totalCost());
         model.addAttribute("quantity", bean.quantity());
