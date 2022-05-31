@@ -5,6 +5,7 @@ import com.example.productcatalog.entity.User;
 import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.repo.UserRepo;
 import com.example.productcatalog.service.ControllerService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/user")
-//@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class UserController {
 
     private final UserRepo userRepo;

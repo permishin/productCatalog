@@ -1,14 +1,17 @@
 package com.example.productcatalog.service;
 
 import com.example.productcatalog.entity.*;
+import com.example.productcatalog.ftp.FTPConnectAndLogin;
 import com.example.productcatalog.model.CartBean;
 import com.example.productcatalog.repo.OrderRepo;
 import com.example.productcatalog.repo.ProductListOrderRepo;
 import com.example.productcatalog.repo.ProductRepo;
 import com.example.productcatalog.repo.UserRepo;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -33,7 +36,6 @@ public class ControllerService {
         this.orderRepo = orderRepo;
         this.plo = plo;
         this.fileService = fileService;
-//        this.s3Amazon = s3Amazon;
         this.productRepo = productRepo;
         this.userRepo = userRepo;
         this.productListOrderRepo = productListOrderRepo;
@@ -62,10 +64,9 @@ public class ControllerService {
         product.setDescription(description);
         product.setPrice(price);
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-            fileService.uploadFile(file);
             String resultFileName = fileService.renameFile(file, file.getOriginalFilename());
+            FTPConnectAndLogin.downloadToServer(file, "gemotest-laboratory.com/docs/images/" + resultFileName, FilenameUtils.getExtension(file.getOriginalFilename()));
             product.setFileName(resultFileName);
-//            s3Amazon.uploadFile(resultFileName, file);
         } else {
             product.setFileName("404.jpg");
         }
@@ -91,12 +92,11 @@ public class ControllerService {
     public void editProduct(Long id, String name, String description, Double price, MultipartFile file) {
         Product product = productRepo.findById(id).orElseThrow(IllegalStateException::new);
         if (file != null && !Objects.requireNonNull(file.getOriginalFilename()).isEmpty()) {
-//            s3Amazon.uploadFile(resultFileName, file);
             fileService.uploadFile(file);
             String resultFileName = fileService.renameFile(file, file.getOriginalFilename());
             product.setFileName(resultFileName);
             if (!product.getFileName().equals("404.jpg")) {
-//                s3Amazon.deleteFile(product.getFileName());
+
             }
             product.setFileName(resultFileName);
         }
