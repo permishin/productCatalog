@@ -9,8 +9,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AppExceptionHandler {
 
     @ExceptionHandler(FileStorageException.class)
-    public ModelAndView handleException(FileStorageException exception, RedirectAttributes redirectAttributes) {
-
+    public ModelAndView handleException(FileStorageException exception) {
         ModelAndView mav = new ModelAndView();
         mav.addObject("message", exception.getMsg());
         mav.setViewName("error");

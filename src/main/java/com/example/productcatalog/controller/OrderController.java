@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-//@PreAuthorize("hasAuthority('ADMIN')")
 public class OrderController {
 
     private final OrderRepo orderRepo;
@@ -48,7 +47,7 @@ public class OrderController {
 
     // Пост удаления заказа
     @PostMapping("/{order_id}/orderDelete")
-    public String deleteOrder(@PathVariable(value = "order_id") Long order_id){
+    public String deleteOrder(@PathVariable(value = "order_id") Long order_id) {
         Orders orders = orderRepo.findById(order_id).orElseThrow(IllegalStateException::new);
         orderRepo.delete(orders);
         return "redirect:/orders";
@@ -68,24 +67,27 @@ public class OrderController {
         model.addAttribute("productList", productList);
         return "orderEdit";
     }
+
     //Добавить продукт в заказ
     @GetMapping("/orders/{id}/addProduct/{idProduct}")
     public String addProductToOrder(@PathVariable(value = "id") Long id,
-                                    @PathVariable (value = "idProduct") Long idProduct) {
+                                    @PathVariable(value = "idProduct") Long idProduct) {
         controllerService.addProductToOrder(id, idProduct);
         return "redirect:/orders/{id}/edit";
     }
+
     //Удалить продукт из заказа
     @GetMapping("/orders/{id}/deleteProduct/{idProduct}")
     public String deleteProductFromOrder(@PathVariable(value = "id") Long id,
-                                         @PathVariable (value = "idProduct") Long idProduct) {
+                                         @PathVariable(value = "idProduct") Long idProduct) {
         controllerService.deleteProductFromOrder(id, idProduct);
         return "redirect:/orders/{id}/edit";
     }
+
     //Изменить количество продукта в заказе
     @PostMapping("/orders/{id}/changeCount/{idProduct}")
     public String changeCount(@RequestParam Integer count,
-                              @PathVariable (name = "idProduct") Long idProduct) {
+                              @PathVariable(name = "idProduct") Long idProduct) {
         controllerService.changeCount(count, idProduct);
         return "redirect:/orders/{id}/edit";
     }

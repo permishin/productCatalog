@@ -36,6 +36,7 @@ public class UserController {
         model.addAttribute("quantity", CartBean.get(request.getSession()).quantity());
         return "userList";
     }
+
     //Страница редактора пользователя
     @GetMapping("{user}")
     public String userEdit(HttpServletRequest request,
@@ -47,6 +48,7 @@ public class UserController {
 
         return "userEdit";
     }
+
     //Метод пост редактора пользователя
     @PostMapping()
     public String userSave(
@@ -57,6 +59,7 @@ public class UserController {
         controllerService.editUser(username, form, user, password);
         return "redirect:/user";
     }
+
     //Удаление пользователя
     @PostMapping("/{id}/remove")
     public String deleteUser(@PathVariable Long id) {
@@ -64,6 +67,7 @@ public class UserController {
         userRepo.delete(user);
         return "redirect:/user";
     }
+
     //Добавление пользователя
     @PostMapping("/addUser")
     public String addNewUser(@RequestParam String username,
@@ -84,10 +88,4 @@ public class UserController {
         userRepo.save(user);
         return "redirect:/user";
     }
-    //Геттер информации о пользователе
-        @GetMapping("/userInfo")
-        public String userInfo(Model model) {
-        
-        return "userInfo";
-        }
 }

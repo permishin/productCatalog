@@ -24,10 +24,11 @@ public class ProductRestController {
     public ResponseEntity<List<Product>> findAll() {
         final List<Product> products = productService.readAll();
 
-        return products != null &&  !products.isEmpty()
+        return products != null && !products.isEmpty()
                 ? new ResponseEntity<>(products, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     //Получить продукт по ID
     @GetMapping(value = "/{id}")
     public ResponseEntity findById(@PathVariable(value = "id") Long Id) {
@@ -36,6 +37,7 @@ public class ProductRestController {
                 ? new ResponseEntity(product, HttpStatus.OK)
                 : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
+
     //Удалить продукт по ID
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Long> delete(@PathVariable(name = "id") Long id) {
@@ -45,12 +47,14 @@ public class ProductRestController {
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
+
     //Добавить продукт
     @PostMapping(value = "/")
     public ResponseEntity<?> create(@RequestBody Product product) {
         productService.create(product);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     //Обновить продукт
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id,

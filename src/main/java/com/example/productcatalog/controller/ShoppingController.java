@@ -29,15 +29,15 @@ public class ShoppingController {
     }
 
     //Кнопка добавить продукт в корзину
-    @RequestMapping({ "/buyProduct" })
+    @RequestMapping({"/buyProduct"})
     public String listProductHandler(HttpServletRequest request,
                                      Model model,
-                                     @RequestParam(value = "id", defaultValue = "") Long id){
+                                     @RequestParam(value = "id", defaultValue = "") Long id) {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
         Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
         bean.findID(id);
-        if(!bean.findIDNoAdd(id)) {
+        if (!bean.findIDNoAdd(id)) {
             bean.addItemProduct(product);
         }
         product.setCount(1);
@@ -81,7 +81,7 @@ public class ShoppingController {
         HttpSession session = request.getSession();
         CartBean bean = CartBean.get(session);
         bean.getProd().get(bean.number(id)).setCount(count);
-        if(count == 0) {
+        if (count == 0) {
             Product product = prodRepo.findById(id).orElseThrow(IllegalStateException::new);
             bean.deleteItemProduct(product);
         }

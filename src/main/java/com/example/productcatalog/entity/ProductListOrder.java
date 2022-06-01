@@ -46,7 +46,6 @@ public class ProductListOrder {
         this.product = product;
     }
 
-
     public Orders getOrders() {
         return orders;
     }

@@ -39,11 +39,16 @@ public class MainController {
     @Value("${file.Dir}")
     private String fileDir;
 
-    //Гет страницы продуктов
+    /**
+     * Getter главной страницы с отображением всех имеющихся товаров каталога
+     *
+     * @param request запрос, поступивший от клиента
+     * @param model   атрибуты, используемые для визуализации представлений
+     * @return возвращает страницу main.html
+     */
     @GetMapping("/")
     public String main(HttpServletRequest request,
                        Model model) {
-
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("title", "Каталог товаров");
         model.addAttribute("uploadPath", fileDir);
@@ -52,23 +57,38 @@ public class MainController {
         return "main";
     }
 
-    //Добавление нового продукта
+    /**
+     * Post метод для добавления нового товара в каталог
+     *
+     * @param name        имя товара
+     * @param description описание товара
+     * @param price       цена товара
+     * @param file        мултипартфайл картинки товара
+     * @param model       атрибуты, используемые для визуализации представлений
+     * @return возвращает страницу main.html
+     */
     @PostMapping("/")
     public String add(
-            @RequestParam (defaultValue = "Без названия")String name,
-            @RequestParam (defaultValue = "Без описания")String description,
-            @RequestParam (defaultValue = "0")Double price,
+            @RequestParam(defaultValue = "Без названия") String name,
+            @RequestParam(defaultValue = "Без описания") String description,
+            @RequestParam(defaultValue = "0") Double price,
             @RequestParam("file") MultipartFile file,
             Model model) {
         Product product = new Product();
-        controllerService.saveProduct(product, name, description, price,file);
+        controllerService.saveProduct(product, name, description, price, file);
         Iterable<Product> list = productRepo.findAll();
         model.addAttribute("uploadPath", fileDir);
         model.addAttribute("list", list);
         return "main";
     }
 
-    //Страница редактирование продукта
+    /**
+     * Getter страницы редактирования товара по id
+     *
+     * @param id    первичный ключ товара
+     * @param model атрибуты, используемые для визуализации представлений
+     * @return возвращает на страницу edit, если товар не найден, возвращает в начало
+     */
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable(value = "id") Long id,
                        Model model) {
@@ -84,7 +104,16 @@ public class MainController {
         return "edit";
     }
 
-    //Пост редактирования продукта
+    /**
+     * Post метод страницы редактирования товара
+     *
+     * @param id          первичный ключ товара (не изменяется)
+     * @param name        новое имя товара, если изменено
+     * @param description новое описание товара, если изменено
+     * @param price       новая цена товара, если изменена
+     * @param file        новая картинка товара, если изменена
+     * @return возвращает в начало
+     */
     @PostMapping("/{id}/edit")
     public String PostEdit(@PathVariable(value = "id") Long id,
                            @RequestParam String name,
@@ -95,7 +124,13 @@ public class MainController {
         return "redirect:/";
     }
 
-    //Удаление продукта
+    /**
+     * Post метод страницы удаления товара (поиск происходит по первичному ключу id)
+     *
+     * @param id    первичный ключ товара
+     * @param model атрибуты, используемые для визуализации представлений
+     * @return возвращает в начало
+     */
     @PostMapping("/{id}/remove")
     public String delete(@PathVariable(value = "id") Long id,
                          Model model) {
@@ -113,10 +148,17 @@ public class MainController {
         return "redirect:/";
     }
 
-    //Фильтр
+    /**
+     * Фильтр по товарам на главное странице
+     *
+     * @param request запрос, поступивший от клиента
+     * @param filter  ключевое слово для фильтрации
+     * @param model   атрибуты, используемые для визуализации представлений
+     * @return возвращает страницу с подходящими товарами
+     */
     @GetMapping("/main")
     public String filter(HttpServletRequest request,
-                         @RequestParam (required = false, defaultValue = "") String filter,
+                         @RequestParam(required = false, defaultValue = "") String filter,
                          Model model) {
         Iterable<Product> product;
         if (filter != null && !filter.isEmpty()) {
@@ -131,7 +173,12 @@ public class MainController {
         return "main";
     }
 
-    //Страница не найдена или нет доступа
+    /**
+     * Сetter страницы ошибки - нет доступа
+     *
+     * @param model атрибуты, используемые для визуализации представлений
+     * @return возвращает 403 страницу
+     */
     @GetMapping("/403")
     public String accessDenied(Model model) {
         model.addAttribute("msg", "Вы сломали интернет!");

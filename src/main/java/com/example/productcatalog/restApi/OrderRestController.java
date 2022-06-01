@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -26,7 +27,7 @@ public class OrderRestController {
     public ResponseEntity<List<Orders>> findAll() {
         final List<Orders> orders = orderService.readAll();
 
-        return orders != null &&  !orders.isEmpty()
+        return orders != null && !orders.isEmpty()
                 ? new ResponseEntity<>(orders, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -56,6 +57,7 @@ public class OrderRestController {
         orderService.create(order);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
     //Обновить заказ
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") Long id,

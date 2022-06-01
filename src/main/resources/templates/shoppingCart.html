@@ -13,50 +13,54 @@
             <div th:if="${message}">
                 <p align="center">
                     <img src="empty.jpg" width="100" height="100"><br>
-                <b><span th:text="${message}"/></b>
+                    <b><span th:text="${message}"/></b>
                 </p>
             </div>
-    <div class="product-preview-container" th:each="i : ${cartForm.prod}">
-        <div class="card mb-3" style="max-width: 600px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <span th:if="${uploadPath} + '/' + ${i.getFileName()}"><img th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></span>
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <div class="row align-items-start">
-                            <div class="col">
-                                <h5 class="card-title" th:text="${i.getName()}"/>
-                            </div>
-                            <div class="col">
-                                <form method="post" th:action="${i.getId()} +'/updateCount'">
-                                <input type="number" th:value="${i.getCount()}" min="1" max="99" step="1" size="3"  name="count" required><button type="submit" class="btn btn-primary btn-sm">Save</button>
+            <div class="product-preview-container" th:each="i : ${cartForm.prod}">
+                <div class="card mb-3" style="max-width: 600px;">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <span th:if="${uploadPath} + '/' + ${i.getFileName()}"><img
+                                    th:src="${uploadPath} + '/' + ${i.getFileName()}" width="150" height="150"></span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="row align-items-start">
+                                    <div class="col">
+                                        <h5 class="card-title" th:text="${i.getName()}"/>
+                                    </div>
+                                    <div class="col">
+                                        <form method="post" th:action="${i.getId()} +'/updateCount'">
+                                            <input type="number" th:value="${i.getCount()}" min="1" max="99" step="1"
+                                                   size="3" name="count" required>
+                                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                        </form>
+                                    </div>
+                                    <div class="col">
+                                        <h5 th:text="${i.getPrice() * i.getCount()}"></h5>
+                                    </div>
+                                </div>
+                                <p class="card-text" th:text="${i.getDescription()}"/>
+                                <form method="post" th:action="${i.getId()} + '/shoppingCart'">
+                                    <button type="submit" class="btn btn-secondary">Убрать из корзины</button>
                                 </form>
                             </div>
-                            <div class="col">
-                            <h5 th:text="${i.getPrice() * i.getCount()}"></h5>
-                            </div>
                         </div>
-                        <p class="card-text" th:text="${i.getDescription()}"/>
-                        <form method="post" th:action="${i.getId()} + '/shoppingCart'">
-                        <button type="submit" class="btn btn-secondary">Убрать из корзины</button>
-                        </form>
                     </div>
                 </div>
             </div>
+            <div class="col-auto">
+                <div> Товаров в корзине: <span th:text="${quantity}"></span></div>
+                <div> Общая стоимость: <span th:text="${totalCost}"></span></div>
+                <a class="btn btn-primary" href="/" role="button">Продолжить покупки</a>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createOrder"
+                        data-bs-whatever="@mdo">Перейти к оформлению
+                </button>
+            </div>
+            </form>
         </div>
     </div>
-    <div class="col-auto">
-        <div> Товаров в корзине: <span th:text="${quantity}"></span></div>
-        <div> Общая стоимость: <span th:text="${totalCost}"></span></div>
-        <a class="btn btn-primary" href="/" role="button">Продолжить покупки</a>
-        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createOrder" data-bs-whatever="@mdo">Перейти к оформлению</button>
-    </div>
-    </form>
 </div>
-    </div>
-</div>
-
 
 
 <div class="modal fade" id="createOrder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -68,18 +72,21 @@
             </div>
             <form th:action="@{/makeOrder}" method="post">
                 <div class="modal-body">
-<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                    <!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
                     <div class="mb-3">
                         <label for="recipient-email" class="col-form-label">Email:</label>
-                        <input type="email" class="form-control" id="recipient-email" name="email" placeholder="Email" required>
+                        <input type="email" class="form-control" id="recipient-email" name="email" placeholder="Email"
+                               required>
                     </div>
                     <div class="mb-3">
                         <label for="recipient-address" class="col-form-label">Адрес доставки:</label>
-                        <input type="text" class="form-control" id="recipient-address" name="address" placeholder="Адрес" required>
+                        <input type="text" class="form-control" id="recipient-address" name="address"
+                               placeholder="Адрес" required>
                     </div>
                     <div class="mb-3">
                         <label for="message" class="col-form-label">Комментарий:</label>
-                        <textarea typeof="text" name="comment" id="message" placeholder="Дополнительная информация" class="form-control"></textarea>
+                        <textarea typeof="text" name="comment" id="message" placeholder="Дополнительная информация"
+                                  class="form-control"></textarea>
                     </div>
                 </div>
 

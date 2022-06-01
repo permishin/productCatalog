@@ -11,7 +11,7 @@ import java.util.List;
 public class Orders {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", length = 50, nullable = false)
     private Long id;
 
@@ -28,7 +28,7 @@ public class Orders {
 
     private String comment;
 
-    @Column(name = "orderprice")
+    @Column(name = "order_price")
     private Double orderPrice;
 
     public Orders() {

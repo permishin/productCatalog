@@ -10,31 +10,31 @@
     <div class="col px-md-5">
         <div class="p-3 border bg-light">
             <form action="/user" method="post">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Логин</th>
-                    <th scope="col">Пароль</th>
-                    <th scope="col">Роль</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Пароль</th>
+                        <th scope="col">Роль</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
 
-<!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
-    <td> <input type="text" th:value="${user.getUsername()}" name="username"/> </td>
-    <input type="hidden" th:value="${user.getId}" name="userId"/>
-    <td> <input type="text" th:value="${user.getPassword}" name="password"/> </td>
-    <td th:each="role : ${roles}">
-        <div>
-        <label><input th:name="${role}" class="form-check-input-pt-3-mt-2" type="checkbox" th:checked="*{user.getRoles.contains(role)}"/><span th:text="${role.name()}"/></label>
-        </div>
-    </td>
-
-
-                </tr>
-                </tbody>
-            </table>
+                        <!--    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />-->
+                        <td><input type="text" th:value="${user.getUsername()}" name="username"/></td>
+                        <input type="hidden" th:value="${user.getId}" name="userId"/>
+                        <td><input type="text" th:value="${user.getPassword}" name="password"/></td>
+                        <td th:each="role : ${roles}">
+                            <div>
+                                <label><input th:name="${role}" class="form-check-input-pt-3-mt-2" type="checkbox"
+                                              th:checked="*{user.getRoles.contains(role)}"/><span
+                                        th:text="${role.name()}"/></label>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
                 <button type="submit" class="btn btn-success">Обновить</button>
                 <button href="/userList" class="btn btn-warning">Отмена</button>
             </form>

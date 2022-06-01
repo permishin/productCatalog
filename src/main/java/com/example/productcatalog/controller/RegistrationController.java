@@ -14,6 +14,7 @@ import java.util.Map;
 public class RegistrationController {
 
     private final UserRepo userRepo;
+
     public RegistrationController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }
@@ -32,7 +33,7 @@ public class RegistrationController {
             model.put("message", "Такой юзер уже существует!");
             return "registration";
         }
-        if(!user.getPassword().equals(user.getPasswordRetry())) {
+        if (!user.getPassword().equals(user.getPasswordRetry())) {
             model.put("message", "Введенные пароли не совпадают! Пишите медленнее и более вдумчиво...");
             return "registration";
         }
