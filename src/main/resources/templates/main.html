@@ -20,7 +20,9 @@
                     </div>
                     <div class="col-auto">
                         <button type="submit" class="btn btn-success">Найти</button>
+                        <span sec:authorize="hasAuthority('ADMIN')">
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Добавить товар</button>
+                        </span>
                     </div>
                 </div>
             </form>
@@ -47,6 +49,7 @@
                         <div class="card-footer">
                             <div class="dropdown ml-auto">
                                 <form method="post" th:action="'/' + ${i.getId()} + '/remove'">
+                                    <span sec:authorize="hasAuthority('ADMIN')">
                                     <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                         Выбрать
                                     </button>
@@ -54,6 +57,7 @@
                                         <li><a th:href="'/' + ${i.getId()} + '/edit'" class="dropdown-item">Редактировать</a></li>
                                         <li><button class="dropdown-item" type="submit">Удалить</button></li>
                                     </ul>
+                                    </span>
                                     <a th:href="@{|/buyProduct?id=${i.getId()}|}" class="btn btn-success">В корзину</a>
                                 </form>
                             </div>

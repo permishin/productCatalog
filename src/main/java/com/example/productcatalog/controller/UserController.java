@@ -64,7 +64,7 @@ public class UserController {
         userRepo.delete(user);
         return "redirect:/user";
     }
-    //Добавление поьзователя
+    //Добавление пользователя
     @PostMapping("/addUser")
     public String addNewUser(@RequestParam String username,
                              User user, Map<String, Object> model) {

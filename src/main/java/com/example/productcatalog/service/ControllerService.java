@@ -11,7 +11,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,8 +22,6 @@ public class ControllerService {
     private final ProductListOrderRepo plo;
 
     private final FileService fileService;
-
-//    private final S3Amazon s3Amazon;
 
     private final ProductRepo productRepo;
 

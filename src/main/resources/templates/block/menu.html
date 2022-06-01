@@ -8,7 +8,9 @@
                 </span>
                 <span sec:authorize="isAuthenticated()">
             <a class="p-2 text-dark" href="/">Главная</a>
+                    <span sec:authorize="hasAuthority('ADMIN')">
             <a class="p-2 text-dark" href="/user">Пользователи</a>
+                    </span>
                     <a href="/shoppingCart" type="button" class="btn btn-primary">
   Корзина <span class="badge badge-light"><span th:text="${quantity}"></span></span>
   <span class="sr-only">unread messages</span>
@@ -19,7 +21,6 @@
 
             </form>
             <span sec:authorize="isAuthenticated()"> Привет <a href="/user/userInfo"><span id="loginControl" sec:authentication="name"></span></a>
-<!--                Роли: <span sec:authentication="principal.authorities"></span> |-->
             </span>
         </nav>
     </div>
